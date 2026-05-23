@@ -19,7 +19,7 @@ Si un bucle itera tres millones de veces sumando este valor, ese minúsculo resi
 Para evitar esto en sistemas críticos, los desarrolladores deben abandonar los tipos de datos de punto flotante primitivos y utilizar bibliotecas de precisión arbitraria o clases específicas para aritmética exacta. En lenguajes como Python se utiliza la clase `Decimal`, y en Java `BigDecimal`. Estas herramientas operan en base 10 y manejan los números como cadenas de caracteres o arreglos de enteros bajo el capó, asegurando que no haya pérdida de precisión, aunque sacrificando velocidad de procesamiento.
 
 ---
-
+`[Acumulacion_de_erroresEnBucles.py](../3-Codigos/Acumulacion_de_erroresEnBucles.py)`
 ## 2. Cancelación Catastrófica (Pérdida de Significancia en Restas)
 
 ### Naturaleza del Problema
