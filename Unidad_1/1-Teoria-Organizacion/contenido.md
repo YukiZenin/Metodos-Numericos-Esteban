@@ -19,6 +19,7 @@ Si un bucle itera tres millones de veces sumando este valor, ese minúsculo resi
 Para evitar esto en sistemas críticos, los desarrolladores deben abandonar los tipos de datos de punto flotante primitivos y utilizar bibliotecas de precisión arbitraria o clases específicas para aritmética exacta. En lenguajes como Python se utiliza la clase `Decimal`, y en Java `BigDecimal`. Estas herramientas operan en base 10 y manejan los números como cadenas de caracteres o arreglos de enteros bajo el capó, asegurando que no haya pérdida de precisión, aunque sacrificando velocidad de procesamiento.
 
 ---
+Código
 [Acumulacion_de_erroresEnBucles.py](../3-Codigos/Acumulacion_de_erroresEnBucles.py)
 ## 2. Cancelación Catastrófica (Pérdida de Significancia en Restas)
 
@@ -37,7 +38,8 @@ El resultado aparente de la resta será un número que parece tener alta precisi
 Prevenir la cancelación catastrófica requiere modificar las fórmulas matemáticas a nivel algebraico antes de programarlas. Los ingenieros de software matemático reescriben las ecuaciones (por ejemplo, multiplicando por conjugados o utilizando series de Taylor) para transformar las restas problemáticas en sumas, multiplicaciones o divisiones, que son operaciones inherentemente estables frente a este tipo de error.
 
 ---
-
+Código
+[Cancelacion_resta.py](../3-Codigos/Cancelacion_resta.py)
 ## 3. Conversión Estrecha (Narrowing Conversion)
 
 ### Naturaleza del Problema
@@ -54,7 +56,8 @@ El efecto inmediato es una alteración drástica e irrecuperable de la informaci
 La mejor práctica es diseñar la arquitectura de datos correctamente desde el principio, garantizando que el flujo de información siempre viaje hacia tipos de datos iguales o más grandes (Widening Conversion). Cuando una conversión estrecha es estrictamente necesaria por motivos de integración con sistemas heredados o APIs externas, el desarrollador debe implementar validaciones rigurosas (bloques `if`) antes de la conversión, asegurándose de que el valor actual del número cabe de forma segura dentro de los límites del tipo de dato más pequeño.
 
 ---
-
+Código
+[Conversion_estrecha.py](../3-Codigos/Conversion_estrecha.py)
 ## 4. Desbordamiento Silencioso (Integer Overflow)
 
 ### Naturaleza del Problema
@@ -71,7 +74,8 @@ Un desbordamiento silencioso causa que el flujo del programa tome decisiones cat
 En lenguajes modernos de alto nivel como Python, los enteros tienen un tamaño dinámico y pueden crecer hasta consumir toda la memoria RAM, evitando el desbordamiento. Sin embargo, en lenguajes como C, C++ o Java, es responsabilidad del programador prevenirlo. Esto se logra utilizando funciones matemáticas seguras que lanzan una excepción si detectan un posible desbordamiento (como `Math.addExact()` en Java) o utilizando aserciones lógicas previas a la suma.
 
 ---
-
+Código
+[Desbordamiento_silencioso.py](../3-Codigos/Desbordamiento_silencioso.py)
 ## 5. Error de Redondeo Binario (Fricción de Base Computacional)
 
 ### Naturaleza del Problema
@@ -89,7 +93,8 @@ Debido a esta limitación física y arquitectónica, los números decimales en l
 Nunca se debe confiar en los tipos primitivos de punto flotante para operaciones donde la exactitud es no negociable, especialmente con dinero. La industria resuelve este problema almacenando los valores como enteros (por ejemplo, guardar los precios en centavos en lugar de dólares, de modo que $10.50 se guarde como el entero 1050) y solo colocar el punto decimal al momento de mostrarlo al usuario en la interfaz.
 
 ---
-
+Código
+[Error_redondeo_binario.py](../3-Codigos/Error_redondeo_binario.py)
 ## 6. Errores en Métodos Numéricos (Comparación Estricta de Flotantes)
 
 ### Naturaleza del Problema
@@ -106,7 +111,8 @@ Este error destruye el control de flujo de la aplicación. Un bucle `while (valo
 El consenso en la ingeniería de software es que usar `==` o `!=` con tipos de punto flotante es un antipatrón (una mala práctica grave). En su lugar, se debe utilizar el concepto matemático de tolerancia (comúnmente llamado Épsilon, $\epsilon$). El desarrollador debe calcular el valor absoluto de la resta de ambos números y verificar si esa diferencia es menor a un umbral insignificante. En lugar de preguntar "¿Es A idéntico a B?", se debe programar la pregunta "¿Están A y B lo suficientemente cerca como para considerarse iguales?".
 
 ---
-
+Código
+[MetodosNumericos.py](../3-Codigos/MetodosNumericos.py)
 ## 7. Pérdida de Precisión por Magnitud (Absorción Computacional)
 
 ### Naturaleza del Problema
@@ -122,3 +128,6 @@ El código `2.11e17 + 1.0` resultará simplemente en `2.11e17`. El programa cree
 
 ### Estrategias de Mitigación
 Para combatir la absorción, los matemáticos computacionales utilizan algoritmos de sumación compensada. El más famoso es el Algoritmo de Suma de Kahan. Este método introduce una variable extra en los bucles (una compensación o "error corrido") que guarda temporalmente esos números microscópicos que están siendo desplazados al vacío. Cuando estos pequeños fragmentos acumulados alcanzan una magnitud suficiente para "sobrevivir" a la alineación de exponentes, son reinyectados de golpe en la suma principal, garantizando que ninguna fracción matemática se pierda por problemas de escala.
+---
+Código
+[Perdida_precisionpormagnitud.py](../3-Codigos/Perdida_precisionpormagnitud.py)
