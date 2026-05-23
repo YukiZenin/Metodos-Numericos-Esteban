@@ -177,3 +177,8 @@ $$I \approx \frac{1}{2} [6] = 3.0$$
 
 ### Código
 [trapecio.py](../3-Codigos/trapecio.py)
+
+Problemario Unidad 4 Esteban Romero Pérez
+ > [!NOTE]
+> Link de problemario
+https://canva.link/byubmt1vql3punk
