@@ -49,4 +49,4 @@ $$\begin{bmatrix} 2 & 1 & -1 & | & 8 \\ 0 & 0.5 & 0.5 & | & 1 \\ 0 & 0 & -1 & | 
 **Solución exacta:** $x = 2$, $y = 3$, $z = -1$.
 
 ### Código
-[eliminacion_gaussiana2.py](../3-Código/eliminacion_gaussiana2.py)
+[eliminacion_gaussiana2.py](../3-Codigos/eliminacion_gaussiana2.py)
