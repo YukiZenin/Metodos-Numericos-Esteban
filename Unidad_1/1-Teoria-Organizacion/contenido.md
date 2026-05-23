@@ -131,3 +131,9 @@ Para combatir la absorción, los matemáticos computacionales utilizan algoritmo
 ---
 Código
 [Perdida_precisionpormagnitud.py](../3-Codigos/Perdida_precisionpormagnitud.py)
+
+
+
+ > [!NOTE]
+> Link de problemario
+https://drive.google.com/file/d/14lG4jknleoZfgeJQVEoQdwv4gUdEC75A/view?usp=sharing
