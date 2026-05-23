@@ -187,3 +187,8 @@ Comparado con Gauss-Seidel que logró $(1.75, 3.5, 3.0)$ en el mismo tiempo, Jac
 
 ### Código
 [Jacobi.py](../3-Codigos/Jacobi.py)
+
+Problemario Unidad 3 Esteban Romero Pérez
+ > [!NOTE]
+> Link de problemario
+https://drive.google.com/file/d/1Rq9Q2qoK5nQ9JtzqtupkDXnKjnEdOZk-/view?usp=drive_link
