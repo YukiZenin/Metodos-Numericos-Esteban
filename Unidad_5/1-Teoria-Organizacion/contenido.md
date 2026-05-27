@@ -153,3 +153,7 @@ S_{n-1}(x) & x \in [x_{n-1}, x_n]
 
 ## Código
 [Interpolacion.py](./3-Codigos/Interpolacion.py)
+﻿Problemario Unidad 1 Esteban Romero Pérez
+ > [!NOTE]
+> Link de problemario
+https://docs.google.com/document/d/1conBeG_7cQcDNQxqpWYS1doGB19HsSLmJ-oKKWu0jPg/edit?usp=drive_link
