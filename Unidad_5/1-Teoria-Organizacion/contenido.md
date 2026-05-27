@@ -150,5 +150,6 @@ S_{n-1}(x) & x \in [x_{n-1}, x_n]
    $$y = 4 + (-1) \cdot 1 = 3$$
 
 **Resultado:** La altura estimada en la posición $x = 3$ mediante el método segmentado es **3**.
-Código
+
+##Código
 [Interpolacion.py](./3-Codigos/Interpolacion.py)
