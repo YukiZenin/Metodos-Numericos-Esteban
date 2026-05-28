@@ -123,7 +123,10 @@ $$k_4 = f(x_i + h, y_i + h k_3)$$
 **Resultado:** Mediante RK4, el valor altamente preciso de $y(0.1)$ es **1.11034**.
 
 ---
-
+﻿Problemario Unidad 6 Esteban Romero Pérez
+ > [!NOTE]
+> Link de problemario
+(https://docs.google.com/document/d/1rk-MkA3gbgQdhzJpSb7arZnZ0lK3JochQMAkRW4v-HY/edit?usp=sharing)
 ## Código 
 
 * [Abrir Método de Runge-Kutta](./3-Codigos/Runge-Kutta.py)
