@@ -152,7 +152,7 @@ S_{n-1}(x) & x \in [x_{n-1}, x_n]
 **Resultado:** La altura estimada en la posición $x = 3$ mediante el método segmentado es **3**.
 
 ## Código
-[Interpolacion.py](./3-Codigos/Interpolacion.py)
+[Interpolacion.py](../3-Codigos/Interpolacion.py)
 ---
 ﻿Problemario Unidad 5 Esteban Romero Pérez
  > [!NOTE]
