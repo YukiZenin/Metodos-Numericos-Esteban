@@ -35,7 +35,7 @@ Donde:
 
 ---
 ## Código 
-* [Abrir Método de Euler](./3-Codigos/Euler.py)
+* [Abrir Método de Euler](../3-Codigos/Euler.py)
 
 ## 2. Método de Taylor (Orden Superior)
 
@@ -72,7 +72,7 @@ Donde $y'_i = f(x_i, y_i)$, y las derivadas siguientes se obtienen derivando imp
 
 ---
 ## Código 
-* [Abrir Método de Taylor](./3-Codigos/taylor.py)
+* [Abrir Método de Taylor](../3-Codigos/taylor.py)
 
 ## 3. Método de Runge-Kutta (Cuarto Orden - RK4)
 
@@ -123,7 +123,7 @@ $$k_4 = f(x_i + h, y_i + h k_3)$$
 **Resultado:** Mediante RK4, el valor altamente preciso de $y(0.1)$ es **1.11034**.
 
 ---
-* [Abrir Método de Runge-Kutta](./3-Codigos/Runge-Kutta.py)
+* [Abrir Método de Runge-Kutta](../3-Codigos/Runge-Kutta.py)
 ---
 ﻿Problemario Unidad 6 Esteban Romero Pérez
  > [!NOTE]
