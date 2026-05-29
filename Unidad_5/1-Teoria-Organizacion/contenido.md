@@ -1,155 +1,155 @@
-## 1. Interpolación Lineal
+## Interpolación Lineal
+
+
 
 ### Teoría y Fundamentación Matemática
-La interpolación lineal es la forma más elemental de aproximación polinómica. Supone que, dentro de un intervalo cerrado definido por dos puntos conocidos $P_0(x_0, y_0)$ y $P_1(x_1, y_1)$, el comportamiento de la función desconocida $f(x)$ puede modelarse aceptablemente mediante una línea recta (un polinomio de primer grado, $P_1(x)$).
+La interpolación es un método numérico utilizado para estimar valores desconocidos que se encuentran **dentro** del rango de un conjunto de datos discretos conocidos. 
 
-Geométricamente, este método se basa en el principio de la **semejanza de triángulos**. Si trazamos una línea recta entre $P_0$ y $P_1$, la pendiente ($m$) de la recta debe permanecer constante en cualquier punto intermedio $(x, y)$ que pertenezca a dicho segmento. Por lo tanto, podemos igualar las pendientes de la siguiente manera:
+La **interpolación lineal** es la forma más simple de interpolación. Consiste en asumir que entre dos puntos de datos adyacentes la función se comporta como una **línea recta**. Matemáticamente, esto equivale a unir dos puntos con un polinomio de primer grado.
 
-$$\frac{y - y_0}{x - x_0} = \frac{y_1 - y_0}{x_1 - x_0}$$
+Este método es muy rápido y fácil de calcular, pero su precisión depende directamente de dos factores:
+1. La naturaleza de la función original (si es muy curva, la línea recta será una mala aproximación).
+2. La distancia entre los puntos de datos (cuanto más cerca estén los puntos $x_0$ y $x_1$, más se parecerá la recta a la curva real, disminuyendo el error de truncamiento).
 
+### Fórmulas y Criterios
+Dados dos puntos conocidos $(x_0, y_0)$ y $(x_1, y_1)$, queremos estimar el valor de $y$ para un valor dado $x$ (donde $x_0 < x < x_1$).
 
+Utilizando la relación de triángulos semejantes o la ecuación de la recta (punto-pendiente), la fórmula de interpolación lineal se define como:
+$$f_1(x) = y_0 + \frac{y_1 - y_0}{x_1 - x_0} (x - x_0)$$
 
-Al despejar la variable dependiente $y$, obtenemos la ecuación clásica de interpolación.
-
-#### Análisis del Error
-El error de truncamiento local para la interpolación lineal está sujeto a la segunda derivada de la función real $f(x)$. Si $f(x)$ es dos veces diferenciable en el intervalo $[x_0, x_1]$, el error $E(x) = f(x) - P_1(x)$ viene dado por:
-
-$$E(x) = \frac{f''(\xi)}{2!} (x - x_0)(x - x_1)$$
-
-Donde $\xi$ es un valor desconocido que reside dentro del intervalo $[x_0, x_1]$. Esto implica dos realidades fundamentales:
-1. El error es estrictamente cero en los nodos de interpolación ($x = x_0$ y $x = x_1$).
-2. El error aumenta si la función real tiene una alta curvatura (segunda derivada grande) o si la distancia horizontal entre $x_0$ y $x_1$ (el tamaño del intervalo) es muy amplia.
-
-### Fórmulas
-Para un valor objetivo $x$ tal que $x_0 \le x \le x_1$:
-
-$$y = y_0 + \frac{y_1 - y_0}{x_1 - x_0} (x - x_0)$$
-
-Donde el término $\frac{y_1 - y_0}{x_1 - x_0}$ representa la razón de cambio o pendiente entre los límites del intervalo.
+Donde:
+* $f_1(x)$ es el valor interpolado (el subíndice 1 indica que es un polinomio de primer grado).
+* El término $\frac{y_1 - y_0}{x_1 - x_0}$ representa la pendiente de la recta que une a los dos puntos.
 
 ### Ejercicio Resuelto
-**Enunciado:** Un experimento químico registra que a una temperatura de $10^\circ\text{C}$ la presión de un gas es de $2.4\text{ atm}$, y a $20^\circ\text{C}$ la presión se eleva a $3.1\text{ atm}$. Suponiendo un comportamiento lineal, estima la presión del gas cuando la temperatura es de $15^\circ\text{C}$.
+**Enunciado:** Estima el valor del logaritmo natural de 2, $\ln(2)$, utilizando interpolación lineal. Para ello, utiliza los puntos conocidos $x_0 = 1$ y $x_1 = 4$. Compara tu resultado con el valor real para calcular el error.
 
 **Solución paso a paso:**
-1. **Definir las variables e identificar los datos:**
-   * Nodo inicial: $x_0 = 10$, $y_0 = 2.4$
-   * Nodo final: $x_1 = 20$, $y_1 = 3.1$
-   * Valor objetivo: $x = 15$
-2. **Sustituir los valores en la fórmula matemática:**
-   $$y = 2.4 + \frac{3.1 - 2.4}{20 - 10} (15 - 10)$$
-3. **Calcular la pendiente (razón de cambio):**
-   $$m = \frac{0.7}{10} = 0.07$$
-4. **Evaluar el desplazamiento respecto al punto de origen:**
-   $$y = 2.4 + 0.07 \cdot (5)$$
-   $$y = 2.4 + 0.35 = 2.75$$
+**1. Identificar los datos conocidos:**
+   Sabemos que $f(x) = \ln(x)$. Extraemos nuestros puntos:
+   * $x_0 = 1 \implies y_0 = \ln(1) = 0$
+   * $x_1 = 4 \implies y_1 = \ln(4) \approx 1.386294$
+   * Valor a interpolar: $x = 2$
 
-**Resultado:** La presión estimada a una temperatura de $15^\circ\text{C}$ es de **2.75 atm**.
+**2. Sustituir en la fórmula de interpolación lineal:**
+   $$f_1(2) = 0 + \frac{1.386294 - 0}{4 - 1} (2 - 1)$$
 
+**3. Resolver las operaciones:**
+   Calculamos la pendiente y multiplicamos por la distancia:
+   $$f_1(2) = \frac{1.386294}{3} (1)$$
+   $$f_1(2) = 0.462098$$
+
+**Conclusión:** La aproximación por interpolación lineal nos da un valor de $0.462098$. El valor analítico real de $\ln(2)$ es aproximadamente $0.693147$. 
+La diferencia es notable (un error grande). Esto ocurre porque el logaritmo natural tiene una curvatura muy pronunciada entre 1 y 4, por lo que una línea recta no se ajusta bien. Si hubiéramos usado puntos más cercanos (como $x_0 = 1.5$ y $x_1 = 2.5$), la estimación habría sido mucho más precisa.
 ---
 
-## 2. Interpolación Cuadrática
+## Interpolación Cuadrática
+
+
 
 ### Teoría y Fundamentación Matemática
-Cuando el fenómeno físico analizado presenta una dinámica no lineal (aceleración, variaciones parabólicas, curvas de crecimiento), una aproximación lineal introduce un sesgo inaceptable. La interpolación cuadrática resuelve esto aproximando la función mediante un polinomio de segundo grado ($P_2(x) = ax^2 + bx + c$), el cual requiere de manera obligatoria **tres puntos conocidos** no colineales.
+Como vimos en la interpolación lineal, unir dos puntos con una línea recta genera un error de truncamiento considerable si la función original tiene curvas pronunciadas. Para corregir esto, la **interpolación cuadrática** utiliza **tres puntos** de datos conocidos para trazar una **parábola** (un polinomio de segundo grado) que pase exactamente por ellos.
 
-Aunque es posible encontrar este polinomio planteando un sistema de ecuaciones lineales de $3 \times 3$ utilizando la matriz de Vandermonde ($ax_i^2 + bx_i + c = y_i$), este enfoque suele ser computacionalmente ineficiente y propenso a errores de redondeo si los nodos están muy juntos. En su lugar, se utiliza el enfoque del **Polinomio de Interpolación de Lagrange**.
+Al emplear una curva en lugar de una recta, el polinomio se adapta mucho mejor a la forma real de la función, reduciendo drásticamente el error de estimación. La forma más común e intuitiva de construir este polinomio en métodos numéricos es utilizando el formato de los **Polinomios de Interpolación de Newton** (basado en diferencias divididas).
 
-La filosofía de Lagrange consiste en construir funciones polinómicas base, denotadas como $L_i(x)$, que actúan como "conmutadores algebraicos". Cada polinomio base $L_i(x)$ tiene la propiedad única de valer exactamente **1** cuando se evalúa en su propio nodo $x_i$, y exactamente **0** cuando se evalúa en cualquier otro nodo $x_j$ (donde $j \neq i$).
+### Fórmulas y Criterios
+Dados tres puntos conocidos $(x_0, y_0)$, $(x_1, y_1)$ y $(x_2, y_2)$, queremos estimar el valor de $y$ para un valor dado $x$.
 
+El polinomio de interpolación cuadrática (de segundo grado) se define como:
+$$f_2(x) = b_0 + b_1(x - x_0) + b_2(x - x_0)(x - x_1)$$
 
-
-De este modo, el polinomio cuadrático global se forma simplemente sumando las ordenadas $y_i$ ponderadas por sus respectivas bases de Lagrange, garantizando que la parábola resultante pase de manera exacta por los tres puntos dados.
-
-### Fórmulas
-Dados los puntos $P_0(x_0, y_0)$, $P_1(x_1, y_1)$ y $P_2(x_2, y_2)$, el polinomio de interpolación es:
-
-$$y = y_0 L_0(x) + y_1 L_1(x) + y_2 L_2(x)$$
-
-Las funciones base de Lagrange de segundo grado se estructuran omitiendo sistemáticamente el nodo actual en el numerador y normalizando el valor en el denominador:
-
-$$L_0(x) = \frac{(x - x_1)(x - x_2)}{(x_0 - x_1)(x_0 - x_2)}$$
-
-$$L_1(x) = \frac{(x - x_0)(x - x_2)}{(x_1 - x_0)(x_1 - x_2)}$$
-
-$$L_2(x) = \frac{(x - x_0)(x - x_1)}{(x_2 - x_0)(x_2 - x_1)}$$
+Para encontrar los coeficientes $b_0$, $b_1$ y $b_2$, evaluamos de forma secuencial:
+1. **Coeficiente $b_0$:** Es simplemente el valor del primer punto.
+   $$b_0 = y_0$$
+2. **Coeficiente $b_1$:** Es la pendiente entre el primer y el segundo punto.
+   $$b_1 = \frac{y_1 - y_0}{x_1 - x_0}$$
+3. **Coeficiente $b_2$:** Representa la curvatura, calculando la diferencia entre las pendientes de los dos intervalos, dividida por la distancia total.
+   $$b_2 = \frac{\frac{y_2 - y_1}{x_2 - x_1} - \frac{y_1 - y_0}{x_1 - x_0}}{x_2 - x_0}$$
 
 ### Ejercicio Resuelto
-**Enunciado:** Un vehículo en una pista de pruebas registra las siguientes posiciones en determinados tiempos: a los $0\text{ s}$ está en la marca de $1\text{ m}$, al cabo de $1\text{ s}$ llega a los $3\text{ m}$, y a los $2\text{ s}$ se ubica en los $7\text{ m}$. Encuentra su posición estimada a los $1.5\text{ s}$ empleando un polinomio de Lagrange de segundo grado.
+**Enunciado:** Vamos a mejorar el cálculo del ejercicio anterior. Estima el valor de $\ln(2)$ mediante interpolación cuadrática utilizando tres puntos: $x_0 = 1$, $x_1 = 4$ y añadiremos un tercer punto $x_2 = 6$. Compara tu resultado con el de la interpolación lineal.
 
 **Solución paso a paso:**
-1. **Estructurar el conjunto de datos:**
-   * $P_0(0, 1) \rightarrow x_0 = 0, \quad y_0 = 1$
-   * $P_1(1, 3) \rightarrow x_1 = 1, \quad y_1 = 3$
-   * $P_2(2, 7) \rightarrow x_2 = 2, \quad y_2 = 7$
-   * Valor a evaluar: $x = 1.5$
-2. **Calcular los polinomios base de Lagrange para $x = 1.5$:**
-   * **Para $L_0$:**
-     $$L_0(1.5) = \frac{(1.5 - 1)(1.5 - 2)}{(0 - 1)(0 - 2)} = \frac{(0.5)(-0.5)}{(-1)(-2)} = \frac{-0.25}{2} = -0.125$$
-   * **Para $L_1$:**
-     $$L_1(1.5) = \frac{(1.5 - 0)(1.5 - 2)}{(1 - 0)(1 - 2)} = \frac{(1.5)(-0.5)}{(1)(-1)} = \frac{-0.75}{-1} = 0.75$$
-   * **Para $L_2$:**
-     $$L_2(1.5) = \frac{(1.5 - 0)(1.5 - 1)}{(2 - 0)(2 - 1)} = \frac{(1.5)(0.5)}{(2)(1)} = \frac{0.75}{2} = 0.375$$
-3. **Efectuar la combinación lineal con las ordenadas:**
-   $$y = (1 \cdot -0.125) + (3 \cdot 0.75) + (7 \cdot 0.375)$$
-   $$y = -0.125 + 2.25 + 2.625$$
-   $$y = 4.75$$
+**1. Identificar los datos conocidos:**
+   Sabemos que $f(x) = \ln(x)$.
+   * $x_0 = 1 \implies y_0 = \ln(1) = 0$
+   * $x_1 = 4 \implies y_1 = \ln(4) \approx 1.386294$
+   * $x_2 = 6 \implies y_2 = \ln(6) \approx 1.791759$
+   * Valor a interpolar: $x = 2$
 
-**Resultado:** La posición estimada del vehículo a los $1.5\text{ s}$ es de **4.75 metros**.
+**2. Calcular los coeficientes $b$:**
+   * **Para $b_0$:**
+     $$b_0 = 0$$
+   * **Para $b_1$:**
+     $$b_1 = \frac{1.386294 - 0}{4 - 1} = \frac{1.386294}{3} = \mathbf{0.462098}$$
+   * **Para $b_2$:**
+     Primero calculamos la pendiente del segundo segmento: $\frac{1.791759 - 1.386294}{6 - 4} = \frac{0.405465}{2} = 0.202732$
+     Ahora sustituimos en la fórmula de $b_2$:
+     $$b_2 = \frac{0.202732 - 0.462098}{6 - 1} = \frac{-0.259366}{5} = \mathbf{-0.051873}$$
 
----
+**3. Sustituir en la ecuación del polinomio:**
+   $$f_2(2) = 0 + 0.462098(2 - 1) + (-0.051873)(2 - 1)(2 - 4)$$
+   $$f_2(2) = 0 + 0.462098(1) - 0.051873(1)(-2)$$
+   $$f_2(2) = 0.462098 + 0.103746$$
+   $$f_2(2) = \mathbf{0.565844}$$
 
-## 3. Interpolación Segmentada (Lineal)
+**Conclusión:** La aproximación por interpolación cuadrática nos da $0.565844$. El valor analítico de $\ln(2)$ es $0.693147$. Nuestro error absoluto ahora es de $\approx 0.1273$, lo cual es **casi la mitad del error** que obtuvimos con la interpolación lineal ($0.2310$). Al añadir la curvatura (coeficiente negativo $b_2$), la parábola se "dobló" hacia abajo acercándose mucho más a la curva real del logaritmo natural.
+
+## Interpolación Segmentada (Splines)
+
+
 
 ### Teoría y Fundamentación Matemática
-A primera vista, podría pensarse que para aproximar con mayor precisión un conjunto grande de datos ($n$ puntos) bastaría con elevar el grado del polinomio de interpolación (por ejemplo, usar un polinomio de grado 6 o 7 para 8 puntos). Sin embargo, esto introduce un problema severo conocido en análisis numérico como el **Fenómeno de Runge**. 
+A medida que aumentamos el número de puntos de datos, los polinomios de interpolación tradicionales (como Newton o Lagrange) requieren un grado cada vez mayor. Esto provoca que la curva resultante oscile violentamente entre los puntos, generando errores de estimación masivos. 
 
-Al ajustar un único polinomio global de alto grado sobre puntos equiespaciados, la curva tiende a desarrollar oscilaciones extremas e inestabilidades violentas, especialmente cerca de los límites del dominio. El polinomio cumple matemáticamente con pasar por los puntos, pero falla por completo en representar el comportamiento intermedio real.
+La **interpolación segmentada** resuelve este problema aplicando un enfoque de "divide y vencerás". En lugar de buscar un único polinomio gigante que pase por todos los puntos, se aplican polinomios de **bajo grado** (líneas, parábolas o curvas cúbicas) para unir los puntos **segmento por segmento**.
 
+Tipos de Splines más comunes:
+* **Splines Lineales (Grado 1):** Une los puntos con líneas rectas. Es simple y rápido, pero genera "picos" en los nodos (no hay suavidad).
+* **Splines Cuadráticos (Grado 2):** Une los puntos con parábolas, asegurando que la primera derivada (la pendiente) sea continua en los nodos.
+* **Splines Cúbicos (Grado 3):** Es el estándar de la industria (usado en software de diseño y gráficos por computadora). Une los puntos con curvas de tercer grado, garantizando que tanto la primera como la segunda derivada sean continuas, logrando una curva visualmente perfecta y suave sin oscilaciones.
 
+Para fines prácticos y de asimilación manual, esta guía se enfoca en la formulación de los **Splines Lineales**.
 
-La **interpolación segmentada** (o interpolación por *splines* de bajo grado) elimina este problema de raíz. En lugar de forzar a que una sola función matemática compleja cubra todo el conjunto de datos, el dominio global se divide en una secuencia de subintervalos adyacentes conectados por los propios nodos. 
+### Fórmulas y Criterios
+Dado un conjunto de puntos ordenados $(x_0, y_0), (x_1, y_1), \dots, (x_n, y_n)$, la interpolación segmentada lineal crea una función $f_i(x)$ para cada intervalo entre $x_{i-1}$ y $x_i$.
 
-En la variante **lineal segmentada**, cada par de puntos consecutivos $[x_i, x_{i+1}]$ se une mediante una recta independiente. Esto garantiza que la aproximación sea continua a lo largo de todo el dominio (continuidad $C^0$), evitando las oscilaciones artificiales de los polinomios de alto grado.
+Para interpolar un valor $x$, primero se debe encontrar en qué intervalo $[x_{i-1}, x_i]$ se encuentra. Una vez identificado el segmento $i$, se aplica la ecuación de la recta para ese tramo:
 
-El proceso algorítmico consta de tres etapas esenciales:
-1. **Ordenamiento:** Asegurar que el conjunto de puntos esté estrictamente ordenado de menor a mayor en el eje $X$.
-2. **Búsqueda del intervalo:** Localizar el segmento específico $[x_i, x_{i+1}]$ tal que cumpla la condición de confinamiento $x_i \le x_{obj} \le x_{i+1}$.
-3. **Evaluación local:** Aplicar la fórmula lineal acotada exclusivamente a los dos puntos que definen el segmento hallado.
+$$f_i(x) = y_{i-1} + m_i (x - x_{i-1})$$
 
-### Fórmulas
-Para un conjunto ordenado de $n$ puntos donde $x \in [x_i, x_{i+1}]$:
-
-$$y = y_i + \frac{y_{i+1} - y_i}{x_{i+1} - x_i} (x - x_i)$$
-
-La función global queda definida por tramos:
-
-$$S(x) = \begin{cases} 
-S_0(x) & x \in [x_0, x_1] \\
-S_1(x) & x \in [x_1, x_2] \\
-\vdots & \\
-S_{n-1}(x) & x \in [x_{n-1}, x_n] 
-\end{cases}$$
+Donde la pendiente $m_i$ del segmento se calcula como:
+$$m_i = \frac{y_i - y_{i-1}}{x_i - x_{i-1}}$$
 
 ### Ejercicio Resuelto
-**Enunciado:** Se dispone del siguiente perfil topográfico digitalizado en tres coordenadas: $P_0(0, 0)$, $P_1(2, 4)$ y $P_2(5, 1)$. Utiliza interpolación lineal segmentada para estimar la altura del terreno ($y$) en la posición horizontal $x = 3$.
+**Enunciado:** Tienes los siguientes datos de velocidad de un vehículo en distintos tiempos:
+* Tiempo 2.0 seg: Velocidad 15.0 m/s
+* Tiempo 4.0 seg: Velocidad 25.0 m/s
+* Tiempo 5.5 seg: Velocidad 20.0 m/s
+
+Calcula la velocidad estimada en el tiempo de 4.5 segundos utilizando interpolación segmentada lineal.
 
 **Solución paso a paso:**
-1. **Identificar y verificar el orden de los intervalos:**
-   * Los puntos ya se encuentran ordenados en el eje $X$ ($0 < 2 < 5$).
-   * Segmento 1: abarca el intervalo $x \in [0, 2]$ mediante los puntos $(0,0)$ y $(2,4)$.
-   * Segmento 2: abarca el intervalo $x \in [2, 5]$ mediante los puntos $(2,4)$ y $(5,1)$.
-2. **Fase de localización del valor objetivo:**
-   * El valor buscado es $x = 3$.
-   * Evaluamos las condiciones: $3$ no pertenece al intervalo $[0, 2]$, pero sí cumple con estar confinado en el intervalo del **Segmento 2** ($2 \le 3 \le 5$). El Segmento 1 queda descartado para el cálculo.
-3. **Efectuar el cálculo lineal restringido al Segmento 2:**
-   * Definimos los parámetros locales del segmento: $x_i = 2, \ y_i = 4$ y $x_{i+1} = 5, \ y_{i+1} = 1$.
-   * Sustituimos en la ecuación lineal de tramo:
-     $$y = 4 + \frac{1 - 4}{5 - 2} (3 - 2)$$
-4. **Resolver la aritmética analíticamente:**
-   $$y = 4 + \frac{-3}{3} (1)$$
-   $$y = 4 + (-1) \cdot 1 = 3$$
+**1. Ordenar e identificar los datos:**
+   Tenemos tres puntos y, por lo tanto, dos intervalos (segmentos):
+   * Segmento 1: Entre $x_0 = 2.0$ y $x_1 = 4.0$
+   * Segmento 2: Entre $x_1 = 4.0$ y $x_2 = 5.5$
+   * Valor objetivo a estimar: $x = 4.5$
 
-**Resultado:** La altura estimada en la posición $x = 3$ mediante el método segmentado es **3**.
+**2. Ubicar el intervalo correspondiente:**
+   El valor objetivo $4.5$ se encuentra entre $4.0$ y $5.5$. Por lo tanto, debemos trabajar exclusivamente con el **Segmento 2**.
+   * Puntos a usar: $(4.0, 25.0)$ y $(5.5, 20.0)$
+
+**3. Calcular la pendiente del Segmento 2 ($m_2$):**
+   $$m_2 = \frac{20.0 - 25.0}{5.5 - 4.0}$$
+   $$m_2 = \frac{-5.0}{1.5} = -3.3333$$
+
+**4. Sustituir en la ecuación del Spline Lineal para ese tramo:**
+   $$f_2(4.5) = 25.0 + (-3.3333)(4.5 - 4.0)$$
+   $$f_2(4.5) = 25.0 - 3.3333(0.5)$$
+   $$f_2(4.5) = 25.0 - 1.6667 = \mathbf{23.3333}$$
+
+**Conclusión:** La velocidad estimada a los 4.5 segundos es de 23.3333 m/s. La principal ventaja de los Splines es que el punto lejano $(2.0, 15.0)$ no afectó negativamente el cálculo en nuestro segmento de interés, evitando así distorsiones globales.
 
 ## Código
 [Interpolacion.py](../3-Codigos/Interpolacion.py)
