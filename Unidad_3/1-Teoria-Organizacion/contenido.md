@@ -1,190 +1,281 @@
-## Eliminación Gaussiana
+## Método de Eliminación Gaussiana
 
-### Naturaleza y Fundamento Matemático
-La eliminación gaussiana es un método directo (no iterativo) del álgebra lineal utilizado para resolver sistemas de ecuaciones lineales de la forma $Ax = b$, encontrar el rango de una matriz o calcular su inversa. A diferencia de los métodos de aproximación de raíces, este algoritmo llega a la solución exacta (salvo errores de redondeo de punto flotante) en un número finito y predecible de pasos.
+### Teoría y Fundamentación Matemática
+A diferencia de los métodos iterativos para buscar raíces, la eliminación gaussiana es un **método directo** utilizado para resolver sistemas de ecuaciones lineales de la forma $Ax = b$. 
 
-El método consiste en operar sobre la **matriz aumentada** (la matriz de coeficientes $A$ junto con el vector de términos independientes $b$) aplicando operaciones elementales de fila. El objetivo es transformar la matriz original en una **matriz triangular superior** (donde todos los elementos por debajo de la diagonal principal son cero). Una vez lograda esta estructura, las incógnitas se despejan fácilmente desde la última hasta la primera mediante un proceso llamado **sustitución hacia atrás**.
+El objetivo principal de este algoritmo es transformar el sistema de ecuaciones original en un sistema equivalente (que tenga exactamente las mismas soluciones) pero que sea mucho más fácil de resolver. Esto se logra mediante **operaciones elementales de fila** (sumar, restar, multiplicar por constantes o intercambiar filas) aplicadas sobre la matriz aumentada del sistema.
 
-### Fórmulas y Operaciones
+El proceso se divide en dos fases principales:
+1. **Eliminación hacia adelante:** Consiste en hacer ceros todos los elementos por debajo de la diagonal principal, convirtiendo la matriz original en una **matriz triangular superior**.
+2. **Sustitución hacia atrás:** Una vez obtenida la matriz triangular, la última ecuación del sistema tendrá una sola incógnita, la cual se despeja directamente. Luego, este valor se sustituye en la ecuación de arriba para hallar la siguiente incógnita, y así sucesivamente hasta resolver todo el sistema.
 
-El algoritmo se divide en dos fases matemáticas principales:
-
-1. **Eliminación hacia adelante:** Para eliminar el elemento en la fila $i$ usando la fila pivote $j$, se aplica la siguiente operación a toda la fila:
-$$R_i \leftarrow R_i - \left( \frac{a_{ij}}{a_{jj}} \right) R_j$$
-*(Donde $R_i$ es la fila actual, $R_j$ es la fila pivote, y $\frac{a_{ij}}{a_{jj}}$ es el factor de eliminación).*
+### Fórmulas y Criterios
+1. **Operación elemental (Cálculo del factor y actualización de fila):**
+   Para eliminar el elemento en la fila $j$ y columna $i$ (donde $j > i$), calculamos un multiplicador o factor $m$:
+   $$m = \frac{a_{ji}}{a_{ii}}$$
+   Y actualizamos toda la fila $j$:
+   $$F_j \leftarrow F_j - m \cdot F_i$$
 
 2. **Sustitución hacia atrás:**
-Una vez que la matriz es triangular superior, las variables $x_i$ se calculan con la fórmula:
-$$x_i = \frac{1}{a_{ii}} \left( b_i - \sum_{j=i+1}^{n} a_{ij} x_j \right)$$
+   Una vez triangularizada la matriz (de tamaño $n \times n$), la variable $x_n$ se halla como:
+   $$x_n = \frac{b_n}{a_{nn}}$$
+   Y las demás variables $x_i$ (desde $i = n-1$ hasta $1$) se despejan iterativamente:
+   $$x_i = \frac{b_i - \sum_{j=i+1}^{n} a_{ij}x_j}{a_{ii}}$$
 
-### Ejemplo Paso a Paso
-
-Supongamos el siguiente sistema de 3 ecuaciones:
+### Ejercicio Resuelto
+**Enunciado:** Resuelve el siguiente sistema de ecuaciones de $3 \times 3$:
 $$2x + y - z = 8$$
 $$-3x - y + 2z = -11$$
 $$-2x + y + 2z = -3$$
 
-**Paso 1: Construir la matriz aumentada**
-$$\begin{bmatrix} 2 & 1 & -1 & | & 8 \\ -3 & -1 & 2 & | & -11 \\ -2 & 1 & 2 & | & -3 \end{bmatrix}$$
+**Solución paso a paso:**
+**1. Construir la matriz aumentada $[A|b]$:**
+$$
+\begin{bmatrix}
+ 2 &  1 & -1 & | &  8 \\
+-3 & -1 &  2 & | & -11 \\
+-2 &  1 &  2 & | & -3
+\end{bmatrix}
+$$
 
-**Paso 2: Eliminación hacia adelante (Hacer ceros debajo de la diagonal)**
-Usamos el pivote $a_{11} = 2$ para eliminar el $-3$ y el $-2$ de la primera columna. 
-- Fila 2: $R_2 \leftarrow R_2 - \left(\frac{-3}{2}\right) R_1$
-- Fila 3: $R_3 \leftarrow R_3 - \left(\frac{-2}{2}\right) R_1$
+**2. Eliminación hacia adelante (hacer ceros debajo del $2$ en la columna 1):**
+* Para $F_2$, el factor es $m = \frac{-3}{2} = -1.5$. Operación: $F_2 \leftarrow F_2 - (-1.5)F_1$
+  Nuevos valores de $F_2$: $[-3 - (-3), \ -1 - (-1.5), \ 2 - (1.5) \ | \ -11 - (-12)] = [0, 0.5, 0.5 \ | \ 1]$
+* Para $F_3$, el factor es $m = \frac{-2}{2} = -1$. Operación: $F_3 \leftarrow F_3 - (-1)F_1$
+  Nuevos valores de $F_3$: $[-2 - (-2), \ 1 - (-1), \ 2 - (1) \ | \ -3 - (-8)] = [0, 2, 1 \ | \ 5]$
 
-Matriz resultante:
-$$\begin{bmatrix} 2 & 1 & -1 & | & 8 \\ 0 & 0.5 & 0.5 & | & 1 \\ 0 & 2 & 1 & | & 5 \end{bmatrix}$$
+Nuestra matriz ahora es:
+$$
+\begin{bmatrix}
+2 & 1 & -1 & | & 8 \\
+0 & 0.5 & 0.5 & | & 1 \\
+0 & 2 & 1 & | & 5
+\end{bmatrix}
+$$
 
-Ahora usamos el pivote $a_{22} = 0.5$ para eliminar el $2$ de la segunda columna.
-- Fila 3: $R_3 \leftarrow R_3 - \left(\frac{2}{0.5}\right) R_2$
+**3. Continuar la eliminación (hacer ceros debajo del $0.5$ en la columna 2):**
+* Para la nueva $F_3$, el factor es $m = \frac{2}{0.5} = 4$. Operación: $F_3 \leftarrow F_3 - 4F_2$
+  Nuevos valores de $F_3$: $[0-0, \ 2 - 4(0.5), \ 1 - 4(0.5) \ | \ 5 - 4(1)] = [0, 0, -1 \ | \ 1]$
 
-Matriz triangular superior resultante:
-$$\begin{bmatrix} 2 & 1 & -1 & | & 8 \\ 0 & 0.5 & 0.5 & | & 1 \\ 0 & 0 & -1 & | & 1 \end{bmatrix}$$
+Nuestra **matriz triangular superior** final es:
+$$
+\begin{bmatrix}
+2 & 1 & -1 & | & 8 \\
+0 & 0.5 & 0.5 & | & 1 \\
+0 & 0 & -1 & | & 1
+\end{bmatrix}
+$$
 
-**Paso 3: Sustitución hacia atrás**
-- De la 3ra fila: $-1z = 1 \implies z = -1$
-- De la 2da fila: $0.5y + 0.5(-1) = 1 \implies 0.5y = 1.5 \implies y = 3$
-- De la 1ra fila: $2x + 1(3) - 1(-1) = 8 \implies 2x + 4 = 8 \implies x = 2$
+**4. Sustitución hacia atrás:**
+* De la fila 3: $-1z = 1 \implies z = -1$
+* De la fila 2: $0.5y + 0.5(-1) = 1 \implies 0.5y - 0.5 = 1 \implies 0.5y = 1.5 \implies y = 3$
+* De la fila 1: $2x + (3) - (-1) = 8 \implies 2x + 4 = 8 \implies 2x = 4 \implies x = 2$
 
-**Solución exacta:** $x = 2$, $y = 3$, $z = -1$.
+**Resultado final:** La solución al sistema es **$x = 2$, $y = 3$, $z = -1$**.
 
 ### Código
 [eliminacion_gaussiana2.py](../3-Codigos/eliminacion_gaussiana2.py)
 
 ## Método de Gauss-Seidel
 
-### Naturaleza y Fundamento Matemático
-A diferencia de la Eliminación Gaussiana, que es un método directo, el método de Gauss-Seidel es un **método iterativo** para resolver sistemas de ecuaciones lineales. Es una versión optimizada y acelerada del método de Jacobi. 
+### Teoría y Fundamentación Matemática
+El método de Gauss-Seidel es un **algoritmo iterativo** utilizado para resolver sistemas de ecuaciones lineales de la forma $Ax = b$. A diferencia de los métodos directos (como la eliminación gaussiana), este método no busca transformar la matriz, sino que parte de una aproximación inicial para las incógnitas (por ejemplo, comenzar asumiendo que todas valen cero) y va refinando los valores ciclo tras ciclo hasta aproximarse a la solución real.
 
-El fundamento de los métodos iterativos es comenzar con una aproximación inicial (usualmente ceros) para todas las variables y refinar esos valores ciclo tras ciclo hasta que la diferencia entre una iteración y la anterior sea imperceptible (menor a una tolerancia). La brillantez de Gauss-Seidel radica en que **utiliza los valores calculados más recientes de inmediato**. En lugar de esperar a que termine toda la iteración para actualizar las variables (como hace Jacobi), Gauss-Seidel sustituye las variables recién descubiertas en las ecuaciones de la misma iteración, lo que acelera dramáticamente la convergencia hacia la respuesta exacta.
+Es una evolución directa del *Método de Jacobi*. La gran mejora de Gauss-Seidel radica en que **utiliza los nuevos valores de las variables inmediatamente después de ser calculados**, en lugar de esperar a que termine toda la iteración completa. Esto acelera significativamente la velocidad de convergencia.
 
-Para que este método garantice su convergencia, la matriz de coeficientes debe ser preferentemente **estrictamente diagonal dominante** (el valor absoluto del coeficiente en la diagonal principal de cada fila debe ser mayor que la suma de los valores absolutos del resto de coeficientes de esa misma fila).
+**Criterio de Convergencia:** Para garantizar que el método converja (no se vuelva infinito), la matriz de coeficientes $A$ idealmente debe ser **estrictamente dominante por diagonal**. Esto significa que en cada fila, el valor absoluto del elemento de la diagonal principal debe ser mayor que la suma de los valores absolutos de los demás elementos de esa misma fila:
+$$|a_{ii}| > \sum_{j \neq i} |a_{ij}|$$
 
-### Fórmulas y Operaciones
-El sistema $Ax = b$ se reescribe despejando la incógnita de la diagonal principal para cada ecuación. La fórmula general para calcular el valor de la incógnita $x_i$ en la iteración actual $(k+1)$ es:
+### Fórmulas y Criterios
+Para un sistema de $n$ ecuaciones, se despeja la variable correspondiente a la diagonal principal de cada ecuación ($x_i$). 
 
-$$x_i^{(k+1)} = \frac{1}{a_{ii}} \left( b_i - \sum_{j=1}^{i-1} a_{ij} x_j^{(k+1)} - \sum_{j=i+1}^{n} a_{ij} x_j^{(k)} \right)$$
+1. **Fórmula de iteración:**
+   En la iteración $k+1$, el cálculo de la variable $x_i$ se expresa como:
+   $$x_i^{(k+1)} = \frac{b_i - \sum_{j=1}^{i-1} a_{ij}x_j^{(k+1)} - \sum_{j=i+1}^{n} a_{ij}x_j^{(k)}}{a_{ii}}$$
+   *Nota: Fíjate cómo las variables desde $j=1$ hasta $i-1$ ya usan el superíndice $(k+1)$ porque acaban de ser actualizadas en esta misma iteración.*
 
-*Nota matemática: Observa cómo la primera sumatoria utiliza $x_j^{(k+1)}$ (valores ya actualizados en la iteración actual), mientras que la segunda sumatoria usa $x_j^{(k)}$ (valores viejos de la iteración anterior, porque aún no se han calculado los nuevos).*
+2. **Criterio de paro (Tolerancia):**
+   El algoritmo se detiene cuando el cambio máximo entre todas las variables de una iteración a otra es menor que la tolerancia permitida:
+   $$\max_{1 \le i \le n} |x_i^{(k+1)} - x_i^{(k)}| \le tol$$
 
-### Ejemplo Paso a Paso
+### Ejercicio Resuelto
+**Enunciado:** Resuelve el siguiente sistema empleando el método de Gauss-Seidel con un vector inicial $x^{(0)} = [0, 0, 0]^T$. Realiza 2 iteraciones.
+$$4x_1 - x_2 = 3$$
+$$-x_1 + 4x_2 - x_3 = 2$$
+$$-x_2 + 4x_3 = 3$$
 
-Dado el sistema de ecuaciones (que es diagonalmente dominante):
-$$4x - y + z = 7$$
-$$4x - 8y + z = -21$$
-$$-2x + y + 5z = 15$$
+*(Nota: El sistema es estrictamente dominante por diagonal ya que $4 > |-1|$, $4 > |-1|+|-1|$ y $4 > |-1|$).*
 
-**Paso 1: Despejar cada variable de la diagonal principal**
-- De la ec. 1: $x = \frac{7 + y - z}{4}$
-- De la ec. 2: $y = \frac{-21 - 4x - z}{-8} = \frac{21 + 4x + z}{8}$
-- De la ec. 3: $z = \frac{15 + 2x - y}{5}$
+**Solución paso a paso:**
+**1. Despejar las incógnitas de la diagonal principal:**
+   * De la ec. 1: $x_1 = \frac{3 + x_2}{4}$
+   * De la ec. 2: $x_2 = \frac{2 + x_1 + x_3}{4}$
+   * De la ec. 3: $x_3 = \frac{3 + x_2}{4}$
 
-**Paso 2: Iteración 1 (Partiendo de $x=0, y=0, z=0$)**
-- Calculamos $x$ usando los valores viejos de $y, z$:
-  $x^{(1)} = \frac{7 + 0 - 0}{4} = 1.75$
-- Calculamos $y$ usando el **nuevo** valor de $x$ y el viejo de $z$:
-  $y^{(1)} = \frac{21 + 4(1.75) + 0}{8} = \frac{21 + 7}{8} = 3.5$
-- Calculamos $z$ usando los **nuevos** valores de $x$ y $y$:
-  $z^{(1)} = \frac{15 + 2(1.75) - 3.5}{5} = \frac{15 + 3.5 - 3.5}{5} = 3.0$
+**2. Iteración 1 (usando valores iniciales $x_1=0, x_2=0, x_3=0$):**
+   * **Calcular $x_1$:** Usamos el valor actual de $x_2$:
+     $$x_1^{(1)} = \frac{3 + 0}{4} = 0.75$$
+   * **Calcular $x_2$:** Usamos el **nuevo** $x_1=0.75$ y el viejo $x_3=0$:
+     $$x_2^{(1)} = \frac{2 + 0.75 + 0}{4} = \frac{2.75}{4} = 0.6875$$
+   * **Calcular $x_3$:** Usamos el **nuevo** $x_2=0.6875$:
+     $$x_3^{(1)} = \frac{3 + 0.6875}{4} = \frac{3.6875}{4} = 0.921875$$
+   * *Vector resultante en Iteración 1:* $x^{(1)} = [0.75, \ 0.6875, \ 0.9219]$
 
-Después de solo una iteración, nuestra aproximación es $(1.75, 3.5, 3.0)$. 
-Si continuamos iterando, los valores se estabilizarán velozmente en la solución exacta: $x = 2$, $y = 4$, $z = 3$.
+**3. Iteración 2 (usando los resultados de la Iteración 1):**
+   * **Calcular $x_1$:** Usamos $x_2=0.6875$:
+     $$x_1^{(2)} = \frac{3 + 0.6875}{4} = \frac{3.6875}{4} = 0.921875$$
+   * **Calcular $x_2$:** Usamos el nuevo $x_1=0.921875$ y el $x_3=0.921875$ anterior:
+     $$x_2^{(2)} = \frac{2 + 0.921875 + 0.921875}{4} = \frac{3.84375}{4} = 0.9609375$$
+   * **Calcular $x_3$:** Usamos el nuevo $x_2=0.9609375$:
+     $$x_3^{(2)} = \frac{3 + 0.9609375}{4} = \frac{3.9609375}{4} = 0.990234375$$
+   * *Vector resultante en Iteración 2:* $x^{(2)} = [0.9219, \ 0.9609, \ 0.9902]$
 
+**Resultado tras 2 iteraciones:** Las aproximaciones son muy cercanas a la solución analítica exacta, la cual es $x = [1, 1, 1]^T$.
 ### Código
  [Gauss-Seidel.py](../3-Codigos/Gauss-Seidel.py)
+ 
  ## Método de Gauss-Jordan
 
-### Naturaleza y Fundamento Matemático
-El método de Gauss-Jordan es una variación directa del método de eliminación gaussiana. También se clasifica como un método directo para resolver sistemas de ecuaciones lineales de la forma $Ax = b$. La diferencia fundamental radica en que, en lugar de reducir la matriz aumentada a una forma triangular superior y luego aplicar la sustitución hacia atrás, el método de Gauss-Jordan continúa la eliminación de coeficientes tanto por debajo como por encima de cada elemento pivote.
+### Teoría y Fundamentación Matemática
+El método de Gauss-Jordan es una variante y extensión directa del método de Eliminación Gaussiana. Al igual que su predecesor, es un **método directo** que utiliza operaciones elementales de fila sobre una matriz aumentada para resolver sistemas de ecuaciones lineales de la forma $Ax = b$.
 
-El objetivo final de este algoritmo es transformar la matriz de coeficientes $A$ directamente en la **matriz identidad** ($I$). Al alcanzar esta estructura balanceada de unos en la diagonal principal y ceros en el resto de las posiciones, el vector de términos independientes $b$ se transforma automáticamente en el vector solución del sistema, eliminando por completo la necesidad de realizar sustituciones hacia atrás.
+La diferencia fundamental radica en su objetivo final: mientras que la eliminación gaussiana se detiene al lograr una matriz triangular superior (requiriendo un proceso de sustitución hacia atrás para encontrar las variables), **Gauss-Jordan continúa operando hasta convertir la matriz de coeficientes en una matriz identidad** (unos en la diagonal principal y ceros en el resto).
 
-### Fórmulas y Operaciones
+Al lograr la matriz identidad, los valores de las incógnitas quedan directamente despejados en el vector de resultados, eliminando por completo la necesidad de la sustitución hacia atrás. Aunque computacionalmente requiere aproximadamente un 50% más de operaciones matemáticas que la eliminación gaussiana clásica, Gauss-Jordan es el método por excelencia cuando se necesita calcular la **matriz inversa** de un sistema.
 
-A lo largo del algoritmo se ejecutan dos operaciones elementales por fila en cada columna $j$:
+### Fórmulas y Criterios
+El procedimiento se realiza columna por columna (desde $i = 1$ hasta $n$), aplicando dos pasos obligatorios por cada columna:
 
-1. **Normalización de la fila pivote:** Se divide toda la fila pivote $R_j$ entre su elemento diagonal $a_{jj}$ para transformarlo estrictamente en 1:
-$$R_j \leftarrow \frac{R_j}{a_{jj}}$$
+1. **Normalización del Pivote:**
+   Se divide toda la fila actual (pivote) entre el valor del elemento de la diagonal principal para convertirlo en $1$:
+   $$F_i \leftarrow \frac{F_i}{a_{ii}}$$
 
-2. **Eliminación en todas las demás filas:** Para cualquier fila $i$ que no sea la fila pivote ($i \neq j$), se elimina el coeficiente de la columna correspondiente aplicando:
-$$R_i \leftarrow R_i - a_{ij} R_j$$
+2. **Eliminación Total (Arriba y Abajo):**
+   Se hacen ceros todos los demás elementos de la columna actual, **tanto por debajo como por encima** del pivote, restando a cada fila un múltiplo de la fila pivote:
+   $$F_j \leftarrow F_j - a_{ji} \cdot F_i \quad \text{para todo } j \neq i$$
 
-### Ejemplo Paso a Paso
-
-Resolveremos el mismo sistema tridimensional para observar la transición operativa de este método:
+### Ejercicio Resuelto
+**Enunciado:** Resuelve el mismo sistema de ecuaciones utilizado en Gauss, pero ahora con el método de Gauss-Jordan:
 $$2x + y - z = 8$$
 $$-3x - y + 2z = -11$$
 $$-2x + y + 2z = -3$$
 
-**Paso 1: Construcción de la matriz aumentada inicial**
-$$\begin{bmatrix} 2 & 1 & -1 & | & 8 \\ -3 & -1 & 2 & | & -11 \\ -2 & 1 & 2 & | & -3 \end{bmatrix}$$
+**Solución paso a paso:**
+**1. Construir la matriz aumentada:**
+$$
+\begin{bmatrix}
+ 2 &  1 & -1 & | &  8 \\
+-3 & -1 &  2 & | & -11 \\
+-2 &  1 &  2 & | & -3
+\end{bmatrix}
+$$
 
-**Paso 2: Procesar la Columna 1**
-Normalizamos la Fila 1 dividiendo entre su propio pivote ($a_{11} = 2$):
-$$\begin{bmatrix} 1 & 0.5 & -0.5 & | & 4 \\ -3 & -1 & 2 & | & -11 \\ -2 & 1 & 2 & | & -3 \end{bmatrix}$$
-Anulamos los elementos de las filas 2 y 3 en la primera columna:
-- $R_2 \leftarrow R_2 - (-3)R_1$
-- $R_3 \leftarrow R_3 - (-2)R_1$
-$$\begin{bmatrix} 1 & 0.5 & -0.5 & | & 4 \\ 0 & 0.5 & 0.5 & | & 1 \\ 0 & 2 & 1 & | & 5 \end{bmatrix}$$
+**2. Trabajar la Columna 1:**
+* **Normalizar pivote (Fila 1):** Dividimos entre $2$.
+  Nuevos valores $F_1$: $[1, \ 0.5, \ -0.5 \ | \ 4]$
+* **Eliminar en Fila 2 y Fila 3:**
+  $F_2 \leftarrow F_2 - (-3)F_1 \implies [-3+3, \ -1+1.5, \ 2-1.5 \ | \ -11+12] = [0, \ 0.5, \ 0.5 \ | \ 1]$
+  $F_3 \leftarrow F_3 - (-2)F_1 \implies [-2+2, \ 1+1, \ 2-1 \ | \ -3+8] = [0, \ 2, \ 1 \ | \ 5]$
 
-**Paso 3: Procesar la Columna 2**
-Normalizamos la Fila 2 dividiendo entre su nuevo pivote ($a_{22} = 0.5$):
-$$\begin{bmatrix} 1 & 0.5 & -0.5 & | & 4 \\ 0 & 1 & 1 & | & 2 \\ 0 & 2 & 1 & | & 5 \end{bmatrix}$$
-Anulamos los elementos de las columnas restantes en las filas 1 y 3:
-- $R_1 \leftarrow R_1 - (0.5)R_2$
-- $R_3 \leftarrow R_3 - (2)R_2$
-$$\begin{bmatrix} 1 & 0 & -1 & | & 3 \\ 0 & 1 & 1 & | & 2 \\ 0 & 0 & -1 & | & 1 \end{bmatrix}$$
+Matriz resultante (Fase 1):
+$$
+\begin{bmatrix}
+1 & 0.5 & -0.5 & | & 4 \\
+0 & 0.5 & 0.5 & | & 1 \\
+0 & 2 & 1 & | & 5
+\end{bmatrix}
+$$
 
-**Paso 4: Procesar la Columna 3**
-Normalizamos la Fila 3 dividiendo entre su pivote final ($a_{33} = -1$):
-$$\begin{bmatrix} 1 & 0 & -1 & | & 3 \\ 0 & 1 & 1 & | & 2 \\ 0 & 0 & 1 & | & -1 \end{bmatrix}$$
-Anulamos los elementos superiores en las filas 1 y 2:
-- $R_1 \leftarrow R_1 - (-1)R_3$
-- $R_2 \leftarrow R_2 - (1)R_3$
-$$\begin{bmatrix} 1 & 0 & 0 & | & 2 \\ 0 & 1 & 0 & | & 3 \\ 0 & 0 & 1 & | & -1 \end{bmatrix}$$
+**3. Trabajar la Columna 2:**
+* **Normalizar pivote (Fila 2):** Dividimos entre $0.5$ (o multiplicamos por 2).
+  Nuevos valores $F_2$: $[0, \ 1, \ 1 \ | \ 2]$
+* **Eliminar arriba (Fila 1) y abajo (Fila 3):**
+  $F_1 \leftarrow F_1 - (0.5)F_2 \implies [1-0, \ 0.5-0.5, \ -0.5-0.5 \ | \ 4-1] = [1, \ 0, \ -1 \ | \ 3]$
+  $F_3 \leftarrow F_3 - (2)F_2 \implies [0-0, \ 2-2, \ 1-2 \ | \ 5-4] = [0, \ 0, \ -1 \ | \ 1]$
 
-**Solución directa obtenida del vector b:** $x = 2$, $y = 3$, $z = -1$.
+Matriz resultante (Fase 2):
+$$
+\begin{bmatrix}
+1 & 0 & -1 & | & 3 \\
+0 & 1 & 1 & | & 2 \\
+0 & 0 & -1 & | & 1
+\end{bmatrix}
+$$
 
+**4. Trabajar la Columna 3:**
+* **Normalizar pivote (Fila 3):** Dividimos entre $-1$.
+  Nuevos valores $F_3$: $[0, \ 0, \ 1 \ | \ -1]$
+* **Eliminar arriba (Fila 1 y Fila 2):**
+  $F_1 \leftarrow F_1 - (-1)F_3 \implies [1, \ 0, \ -1+1 \ | \ 3-1] = [1, \ 0, \ 0 \ | \ 2]$
+  $F_2 \leftarrow F_2 - (1)F_3 \implies [0, \ 1, \ 1-1 \ | \ 2-(-1)] = [0, \ 1, \ 0 \ | \ 3]$
+
+**Matriz Identidad Final:**
+$$
+\begin{bmatrix}
+1 & 0 & 0 & | & 2 \\
+0 & 1 & 0 & | & 3 \\
+0 & 0 & 1 & | & -1
+\end{bmatrix}
+$$
+
+**Resultado final:** Sin necesidad de sustitución hacia atrás, la columna de resultados nos da directamente la solución: **$x = 2$, $y = 3$, $z = -1$**.
+
+---
 ### Código
 [GaussJordan.py](../3-Codigos/GaussJordan.py)
 
 ## Método de Jacobi
 
-### Naturaleza y Fundamento Matemático
-El método de Jacobi es un **método iterativo** clásico para resolver sistemas de ecuaciones lineales de la forma $Ax = b$. Al igual que Gauss-Seidel, requiere que se parta de una aproximación inicial (generalmente un vector de ceros) y va refinando los resultados en cada ciclo hasta alcanzar una convergencia dentro de un margen de tolerancia. También exige que la matriz de coeficientes sea preferentemente diagonal dominante para asegurar que el algoritmo converja y no diverja hacia el infinito.
+### Teoría y Fundamentación Matemática
+El método de Jacobi es un **algoritmo iterativo** para resolver sistemas de ecuaciones lineales de la forma $Ax = b$. Al igual que Gauss-Seidel, requiere que la matriz de coeficientes sea preferentemente **estrictamente dominante por diagonal** para asegurar su convergencia.
 
-La diferencia fundamental (y su principal desventaja) frente a Gauss-Seidel radica en **cómo actualiza las variables**. En el método de Jacobi, los nuevos valores calculados en la iteración actual no se utilizan inmediatamente; se guardan en un vector temporal. Para calcular cualquier variable en el ciclo actual, el algoritmo está forzado a usar **únicamente los valores viejos** del ciclo anterior. Una vez que se terminan de calcular todas las variables, el vector viejo se reemplaza por completo con el vector nuevo. Esto hace que converja más lentamente que Gauss-Seidel.
+La diferencia fundamental entre Jacobi y Gauss-Seidel es la forma en que se actualizan las variables. En el método de Jacobi, para calcular los valores de la iteración actual ($k+1$), **se utilizan única y exclusivamente los valores de la iteración anterior ($k$)**. 
 
-### Fórmulas y Operaciones
-El sistema se despeja dejando sola a la variable de la diagonal principal para cada ecuación. La fórmula general para calcular el valor de la incógnita $x_i$ en la nueva iteración $(k+1)$ es:
+Esto significa que no se actualizan las variables "en tiempo real" durante el ciclo. Aunque esto hace que su convergencia sea más lenta comparada con Gauss-Seidel, tiene una gran ventaja computacional: los cálculos de cada variable son completamente independientes entre sí, lo que hace que este método sea ideal para el **procesamiento en paralelo**.
 
-$$x_i^{(k+1)} = \frac{1}{a_{ii}} \left( b_i - \sum_{j=1, j \neq i}^{n} a_{ij} x_j^{(k)} \right)$$
+### Fórmulas y Criterios
+Para un sistema de $n$ ecuaciones, se despeja la variable correspondiente a la diagonal principal de cada ecuación ($x_i$).
 
-*Nota matemática: Observa que toda la sumatoria utiliza exclusivamente $x_j^{(k)}$ (los valores de la iteración pasada), a diferencia de Gauss-Seidel que mezcla iteraciones.*
+1. **Fórmula de iteración:**
+   En la iteración $k+1$, el cálculo de la variable $x_i$ se expresa como:
+   $$x_i^{(k+1)} = \frac{b_i - \sum_{j \neq i} a_{ij}x_j^{(k)}}{a_{ii}}$$
+   *Nota: Observa que todas las variables del lado derecho de la ecuación usan el superíndice $(k)$, es decir, pertenecen estrictamente a la iteración pasada.*
 
-### Ejemplo Paso a Paso
+2. **Criterio de paro (Tolerancia):**
+   El proceso se detiene cuando la máxima diferencia absoluta entre los valores nuevos y los anteriores es menor que la tolerancia fijada:
+   $$\max_{1 \le i \le n} |x_i^{(k+1)} - x_i^{(k)}| \le tol$$
 
-Utilizaremos el mismo sistema del método anterior para notar la diferencia de velocidad:
-$$4x - y + z = 7$$
-$$4x - 8y + z = -21$$
-$$-2x + y + 5z = 15$$
+### Ejercicio Resuelto
+**Enunciado:** Resuelve el siguiente sistema empleando el método de Jacobi con un vector inicial $x^{(0)} = [0, 0, 0]^T$. Realiza 2 iteraciones. *(Es el mismo sistema usado en Gauss-Seidel para que notes la diferencia en los resultados intermedios).*
+$$4x_1 - x_2 = 3$$
+$$-x_1 + 4x_2 - x_3 = 2$$
+$$-x_2 + 4x_3 = 3$$
 
-**Paso 1: Despejar cada variable de la diagonal principal**
-- $x = \frac{7 + y - z}{4}$
-- $y = \frac{21 + 4x + z}{8}$
-- $z = \frac{15 + 2x - y}{5}$
+**Solución paso a paso:**
+**1. Despejar las incógnitas de la diagonal principal:**
+   * $x_1 = \frac{3 + x_2}{4}$
+   * $x_2 = \frac{2 + x_1 + x_3}{4}$
+   * $x_3 = \frac{3 + x_2}{4}$
 
-**Paso 2: Iteración 1 (Partiendo de $x^{(0)}=0, y^{(0)}=0, z^{(0)}=0$)**
-- Calculamos $x$ usando los valores viejos (0 y 0):
-  $x^{(1)} = \frac{7 + 0 - 0}{4} = 1.75$
-- Calculamos $y$ usando los valores viejos de $x$ y $z$ (0 y 0) *(Nota: No usamos el 1.75 aquí)*:
-  $y^{(1)} = \frac{21 + 4(0) + 0}{8} = 2.625$
-- Calculamos $z$ usando los valores viejos de $x$ y $y$ (0 y 0):
-  $z^{(1)} = \frac{15 + 2(0) - 0}{5} = 3.0$
+**2. Iteración 1 (usando valores iniciales $x^{(0)} = [0, 0, 0]$):**
+   * **Calcular $x_1^{(1)}$:** $x_1^{(1)} = \frac{3 + 0}{4} = 0.75$
+   * **Calcular $x_2^{(1)}$:** $x_2^{(1)} = \frac{2 + 0 + 0}{4} = 0.5$
+   * **Calcular $x_3^{(1)}$:** $x_3^{(1)} = \frac{3 + 0}{4} = 0.75$
+   * *Vector resultante en Iteración 1:* $x^{(1)} = [0.75, \ 0.5, \ 0.75]$
+   *(Nota cómo en Gauss-Seidel el valor de $x_2$ daba 0.6875 porque usaba el nuevo $x_1$. Aquí, usamos los ceros iniciales para todos).*
 
-Al finalizar la iteración 1, nuestra aproximación es $(1.75, 2.625, 3.0)$. 
-Comparado con Gauss-Seidel que logró $(1.75, 3.5, 3.0)$ en el mismo tiempo, Jacobi está un poco más atrasado en acercarse a la solución real exacta ($x=2, y=4, z=3$), por lo que requerirá más iteraciones computacionales.
+**3. Iteración 2 (usando los resultados de la Iteración 1):**
+   * **Calcular $x_1^{(2)}$:** Usamos $x_2^{(1)} = 0.5$:
+     $$x_1^{(2)} = \frac{3 + 0.5}{4} = \frac{3.5}{4} = 0.875$$
+   * **Calcular $x_2^{(2)}$:** Usamos $x_1^{(1)} = 0.75$ y $x_3^{(1)} = 0.75$:
+     $$x_2^{(2)} = \frac{2 + 0.75 + 0.75}{4} = \frac{3.5}{4} = 0.875$$
+   * **Calcular $x_3^{(2)}$:** Usamos $x_2^{(1)} = 0.5$:
+     $$x_3^{(2)} = \frac{3 + 0.5}{4} = \frac{3.5}{4} = 0.875$$
+   * *Vector resultante en Iteración 2:* $x^{(2)} = [0.875, \ 0.875, \ 0.875]$
 
+**Resultado tras 2 iteraciones:** Se observa cómo los valores se van acercando uniformemente a la solución analítica $x = [1, 1, 1]^T$, aunque un poco más lento que con Gauss-Seidel.
+
+---
 ### Código
 [Jacobi.py](../3-Codigos/Jacobi.py)
 
