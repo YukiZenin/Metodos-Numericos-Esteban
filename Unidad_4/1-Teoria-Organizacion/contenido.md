@@ -1,180 +1,228 @@
 ﻿## Diferenciación Numérica: Regla de los 3 Puntos
 
-### Naturaleza y Fundamento Matemático
-La diferenciación numérica es una técnica utilizada para aproximar la derivada de una función cuando no se conoce su expresión analítica, la función es demasiado compleja para derivar, o solo se dispone de un conjunto de datos tabulados discretos. 
+### Teoría y Fundamentación Matemática
+La derivación numérica se utiliza para aproximar la derivada de una función $f'(x)$ cuando solo disponemos de un conjunto de datos discretos (una tabla de valores) o cuando la función matemática es demasiado compleja para derivarse analíticamente.
 
-Las **fórmulas de 3 puntos** surgen al expandir la función mediante series de Taylor y tomar tres puntos vecinos (usualmente separados por una distancia constante $h$) para estimar la pendiente. A diferencia de las aproximaciones básicas de dos puntos (que tienen un error de truncamiento del orden de $O(h)$), las reglas de tres puntos logran un error de truncamiento del orden de $O(h^2)$, lo que las hace significativamente más precisas. Dependiendo de la posición del punto de interés respecto a los datos disponibles, se puede calcular la derivada evaluando hacia adelante, hacia atrás, o de forma centrada.
+Las **fórmulas de 3 puntos** mejoran sustancialmente la precisión de las diferencias finitas básicas (que usan solo 2 puntos). Como su nombre indica, evalúan la función en tres puntos equiespaciados por una distancia $h$. Existen dos variantes principales:
+1. **Regla del punto medio (Diferencia Central):** Aproxima la derivada evaluando un punto hacia adelante y un punto hacia atrás del valor objetivo. Es la más exacta de todas.
+2. **Regla del extremo (Diferencias Progresivas/Regresivas):** Evalúa el punto objetivo y dos puntos sucesivos (hacia adelante o hacia atrás). Es indispensable usarla en los "bordes" de una tabla de datos, donde es imposible mirar hacia atrás (o hacia adelante) porque no hay más registros.
 
-### Fórmulas y Operaciones
+### Fórmulas y Criterios
+Dado un punto objetivo $x_0$ y un tamaño de paso $h$:
 
-Sea $x_i$ el punto donde queremos evaluar la primera derivada $f'(x_i)$, y $h$ el tamaño del paso (distancia entre puntos).
+1. **Fórmula de 3 puntos en el punto medio (Central):**
+   $$f'(x_0) \approx \frac{f(x_0 + h) - f(x_0 - h)}{2h}$$
 
-1. **Diferencia hacia adelante (Progresiva):**
-Se utiliza cuando se conocen los puntos actuales y los dos siguientes ($x_i, x_{i+1}, x_{i+2}$). Es útil en el límite inicial de un conjunto de datos.
-$$f'(x_i) \approx \frac{-3f(x_i) + 4f(x_{i+1}) - f(x_{i+2})}{2h}$$
+2. **Fórmula de 3 puntos en el extremo (Progresiva):**
+   *(Se usa para evaluar el primer punto de un conjunto de datos)*
+   $$f'(x_0) \approx \frac{-3f(x_0) + 4f(x_0 + h) - f(x_0 + 2h)}{2h}$$
 
-2. **Diferencia hacia atrás (Regresiva):**
-Se utiliza cuando se conocen los puntos actuales y los dos anteriores ($x_i, x_{i-1}, x_{i-2}$). Es ideal para el límite final de un conjunto de datos.
-$$f'(x_i) \approx \frac{3f(x_i) - 4f(x_{i-1}) + f(x_{i-2})}{2h}$$
+*Nota: Para la fórmula regresiva (último punto de los datos), se utiliza la misma estructura progresiva pero asumiendo un valor de $h$ negativo.*
 
-3. **Diferencia Centrada:**
-Utiliza el punto anterior y el siguiente ($x_{i-1}$ y $x_{i+1}$). Curiosamente, el término $f(x_i)$ se cancela algebraicamente durante la deducción con series de Taylor, pero se sigue considerando una fórmula de 3 puntos porque abarca ese dominio. Es la más exacta de las tres para un mismo tamaño de $h$.
-$$f'(x_i) \approx \frac{f(x_{i+1}) - f(x_{i-1})}{2h}$$
+### Ejercicio Resuelto
+**Enunciado:** Aproxima la primera derivada de la función $f(x) = x e^x$ en el punto $x_0 = 2.0$, utilizando un tamaño de paso $h = 0.1$. Calcula tanto la fórmula del punto medio como la del extremo progresivo y compáralas con el valor analítico exacto.
 
-### Ejemplo Paso a Paso
+**Solución paso a paso:**
+**1. Preparación y evaluación de puntos:**
+   Calculamos los valores de la función alrededor de $x = 2.0$:
+   * $f(1.9) = 1.9 e^{1.9} = 12.7032$
+   * $f(2.0) = 2.0 e^{2.0} = 14.7781$
+   * $f(2.1) = 2.1 e^{2.1} = 17.1490$
+   * $f(2.2) = 2.2 e^{2.2} = 19.8550$
 
-Aproximemos la primera derivada de la función $f(x) = x^3$ en el punto $x = 1.0$ utilizando un paso $h = 0.1$.
-*(Nota: Analíticamente, la derivada es $f'(x) = 3x^2$, por lo que el valor exacto en $x=1.0$ es **$3.0$**).*
+**2. Valor Real (Analítico):**
+   La derivada de $x e^x$ es $f'(x) = e^x(x + 1)$.
+   Evaluando en 2.0: $f'(2.0) = e^{2.0}(2 + 1) = 3(7.3891) = \mathbf{22.1672}$
 
-**Paso 1: Identificar los puntos necesarios**
-Necesitamos calcular $f(x)$ para los puntos circundantes:
-- $x_{i-2} = 0.8 \implies f(0.8) = 0.8^3 = 0.512$
-- $x_{i-1} = 0.9 \implies f(0.9) = 0.9^3 = 0.729$
-- $x_i = 1.0 \implies f(1.0) = 1.0^3 = 1.000$
-- $x_{i+1} = 1.1 \implies f(1.1) = 1.1^3 = 1.331$
-- $x_{i+2} = 1.2 \implies f(1.2) = 1.2^3 = 1.728$
+**3. Aproximación con la Regla del Punto Medio (Central):**
+   Usamos $x_0 = 2.0$, por lo que necesitamos los valores en $1.9$ y $2.1$:
+   $$f'(2.0) \approx \frac{f(2.1) - f(1.9)}{2(0.1)}$$
+   $$f'(2.0) \approx \frac{17.1490 - 12.7032}{0.2} = \frac{4.4458}{0.2} = \mathbf{22.2290}$$
+   *(Error absoluto aproximado: $0.0618$)*
 
-**Paso 2: Aplicar Regla Hacia Adelante**
-$$f'(1.0) \approx \frac{-3(1.000) + 4(1.331) - 1.728}{2(0.1)} = \frac{-3.000 + 5.324 - 1.728}{0.2} = \frac{0.596}{0.2} = 2.98$$
+**4. Aproximación con la Regla del Extremo (Progresiva):**
+   Usamos $x_0 = 2.0$, por lo que necesitamos los valores hacia adelante ($2.0$, $2.1$ y $2.2$):
+   $$f'(2.0) \approx \frac{-3f(2.0) + 4f(2.1) - f(2.2)}{2(0.1)}$$
+   $$f'(2.0) \approx \frac{-3(14.7781) + 4(17.1490) - 19.8550}{0.2}$$
+   $$f'(2.0) \approx \frac{-44.3343 + 68.5960 - 19.8550}{0.2} = \frac{4.4067}{0.2} = \mathbf{22.0335}$$
+   *(Error absoluto aproximado: $0.1337$)*
 
-**Paso 3: Aplicar Regla Hacia Atrás**
-$$f'(1.0) \approx \frac{3(1.000) - 4(0.729) + 0.512}{2(0.1)} = \frac{3.000 - 2.916 + 0.512}{0.2} = \frac{0.596}{0.2} = 2.98$$
-
-**Paso 4: Aplicar Regla Centrada**
-$$f'(1.0) \approx \frac{1.331 - 0.729}{2(0.1)} = \frac{0.602}{0.2} = 3.01$$
-
-Como se observa, las tres reglas ofrecen valores muy cercanos al valor real de $3.0$, siendo aproximaciones excelentes de orden $O(h^2)$.
-
+**Conclusión:** Como dicta la teoría, la regla del punto medio ofrece una mejor aproximación a la derivada real que la regla del extremo al poseer un menor error de truncamiento.
 ### Código
 [Regla3puntos.py](../3-Codigos/Regla3puntos.py)
-## Integración Numérica: Regla de Simpson 1/3
 
-### Naturaleza y Fundamento Matemático
-La regla de Simpson 1/3 es un método de integración numérica que pertenece a la familia de las fórmulas de Newton-Cotes. Mientras que métodos más simples (como la regla del trapecio) conectan los puntos de una función con líneas rectas, la regla de Simpson 1/3 conecta grupos de tres puntos sucesivos utilizando **parábolas** (polinomios de segundo grado). 
+## Regla de Simpson 1/3
 
-Al curvarse para adaptarse a la forma de la función real, este método reduce drásticamente el error de aproximación frente a las líneas rectas. Una peculiaridad matemática muy importante de la regla de Simpson 1/3 es que, aunque utiliza polinomios de grado 2 para aproximar, es capaz de integrar exactamente polinomios de hasta grado 3 (cúbicos) sin ningún margen de error. 
 
-Para poder aplicar la regla de Simpson 1/3 de forma compuesta (repetida) en un intervalo grande, es un requisito estricto que el número de subintervalos ($n$) sea un **número par** (lo que equivale a un número impar de puntos evaluados).
 
-### Fórmulas y Operaciones
+### Teoría y Fundamentación Matemática
+La integración numérica busca aproximar el valor de una integral definida $\int_a^b f(x) dx$ calculando el área bajo la curva de la función. Mientras que la regla del trapecio une los puntos de la función con líneas rectas, la **Regla de Simpson 1/3** los une utilizando **parábolas** (polinomios de segundo grado).
 
+Al utilizar una curva en lugar de una recta para ajustarse al contorno de la función original, este método logra una precisión mucho mayor. Para trazar una parábola se necesitan exactamente tres puntos, lo que significa que el intervalo a evaluar debe dividirse en dos subintervalos iguales. 
+
+Cuando el área total a evaluar es muy grande, se utiliza la **Regla de Simpson 1/3 Compuesta**, que consiste en aplicar el método repetidas veces a lo largo de toda la función. La condición más importante de este método es que el número total de subintervalos ($n$) **debe ser un número par**. El "1/3" en su nombre proviene del factor $h/3$ que aparece al resolver analíticamente la integral de la parábola.
+
+### Fórmulas y Criterios
 Dado un intervalo de integración $[a, b]$ dividido en $n$ subintervalos (donde $n$ es par):
 
-1. **Cálculo del tamaño del paso ($h$):**
-$$h = \frac{b - a}{n}$$
+1. **Tamaño del paso ($h$):**
+   La distancia entre cada punto evaluado (ancho de cada subintervalo) es:
+   $$h = \frac{b - a}{n}$$
 
-2. **Fórmula Compuesta de Simpson 1/3:**
-La aproximación de la integral $I$ se calcula sumando los extremos y alternando coeficientes de 4 y 2 para los puntos intermedios:
-$$I \approx \frac{h}{3} \left[ f(x_0) + 4 \sum_{i=1, 3, 5...}^{n-1} f(x_i) + 2 \sum_{j=2, 4, 6...}^{n-2} f(x_j) + f(x_n) \right]$$
+2. **Fórmula de Simpson 1/3 Compuesta:**
+   Para aproximar la integral, se evalúa la función en los puntos $x_0, x_1, x_2, \dots, x_n$ y se aplica la siguiente ponderación:
+   $$\int_a^b f(x) dx \approx \frac{h}{3} \left[ f(x_0) + 4 \sum_{i=1,3,5...}^{n-1} f(x_i) + 2 \sum_{j=2,4,6...}^{n-2} f(x_j) + f(x_n) \right]$$
+   
+   *En palabras simples:* Se suman el primer y último punto, más **4 veces** la suma de los puntos en posiciones impares, más **2 veces** la suma de los puntos en posiciones pares; todo esto multiplicado por $h/3$.
 
-*Regla mnemotécnica: Los extremos se multiplican por 1, los índices impares se multiplican por 4, y los índices pares se multiplican por 2.*
+### Ejercicio Resuelto
+**Enunciado:** Aproxima la integral de la función $f(x) = \frac{1}{x}$ en el intervalo $[1, 3]$ utilizando la Regla de Simpson 1/3 con $n = 4$ subintervalos.
 
-### Ejemplo Paso a Paso
+**Solución paso a paso:**
+**1. Verificación y cálculo del tamaño de paso ($h$):**
+   * El número de subintervalos $n = 4$ es par, por lo que podemos usar el método.
+   * Calculamos $h$:
+     $$h = \frac{3 - 1}{4} = \frac{2}{4} = 0.5$$
 
-Vamos a aproximar la integral definida de la función $f(x) = x^2$ en el intervalo de $a = 0$ a $b = 2$, utilizando $n = 2$ subintervalos.
-*(Nota: Analíticamente, la integral exacta es $\int_{0}^{2} x^2 dx = \frac{x^3}{3} \Big|_0^2 = \frac{8}{3} \approx 2.6666...$)*
+**2. Determinación de los puntos a evaluar ($x_i$):**
+   Comenzamos en $a = 1$ y avanzamos de $0.5$ en $0.5$ hasta llegar a $b = 3$.
+   * $x_0 = 1.0$
+   * $x_1 = 1.5$ (Impar)
+   * $x_2 = 2.0$ (Par)
+   * $x_3 = 2.5$ (Impar)
+   * $x_4 = 3.0$
 
-**Paso 1: Calcular $h$ y los puntos a evaluar**
-$$h = \frac{2 - 0}{2} = 1$$
-Los puntos $x$ espaciados por $h$ son:
-- $x_0 = 0 \implies f(0) = 0^2 = 0$
-- $x_1 = 1 \implies f(1) = 1^2 = 1$
-- $x_2 = 2 \implies f(2) = 2^2 = 4$
+**3. Evaluación de la función $f(x) = \frac{1}{x}$ en cada punto:**
+   * $f(x_0) = \frac{1}{1.0} = 1.0000$
+   * $f(x_1) = \frac{1}{1.5} = 0.6667$
+   * $f(x_2) = \frac{1}{2.0} = 0.5000$
+   * $f(x_3) = \frac{1}{2.5} = 0.4000$
+   * $f(x_4) = \frac{1}{3.0} = 0.3333$
 
-**Paso 2: Aplicar la fórmula de Simpson 1/3**
-Como solo tenemos $n=2$, la fórmula se simplifica a los tres puntos básicos:
-$$I \approx \frac{h}{3} \left[ f(x_0) + 4f(x_1) + f(x_2) \right]$$
-$$I \approx \frac{1}{3} \left[ 0 + 4(1) + 4 \right]$$
-$$I \approx \frac{1}{3} [8] = \frac{8}{3} \approx 2.6666...$$
+**4. Aplicación de la fórmula de Simpson 1/3:**
+   Agrupamos según la fórmula (extremos solos, impares $\times 4$, pares $\times 2$):
+   $$I \approx \frac{0.5}{3} \Big[ f(1.0) + 4 \big( f(1.5) + f(2.5) \big) + 2 \big( f(2.0) \big) + f(3.0) \Big]$$
+   $$I \approx \frac{0.5}{3} \Big[ 1.0000 + 4(0.6667 + 0.4000) + 2(0.5000) + 0.3333 \Big]$$
+   $$I \approx \frac{0.5}{3} \Big[ 1.0000 + 4(1.0667) + 1.0000 + 0.3333 \Big]$$
+   $$I \approx \frac{0.5}{3} \Big[ 1.0000 + 4.2668 + 1.0000 + 0.3333 \Big]$$
+   $$I \approx \frac{0.5}{3} [6.6001] \approx 1.1000$$
 
-*El resultado es numéricamente exacto al valor analítico, demostrando la eficacia de este método en polinomios de grado bajo.*
+**Conclusión:** La aproximación numérica es $1.1000$. El valor real de esta integral (que es $\ln(3)$) es aproximadamente $1.0986$. Con solo 4 subintervalos, logramos una exactitud de hasta el segundo decimal (error de apenas $0.0014$).
 
 ### Código
 [simpson13.py](../3-Codigos/simpson13.py)
-## Integración Numérica: Regla de Simpson 3/8
+## Regla de Simpson 3/8
 
-### Naturaleza y Fundamento Matemático
-La regla de Simpson 3/8 es otra técnica de integración numérica de la familia de Newton-Cotes. Mientras que la regla de Simpson 1/3 utiliza parábolas (polinomios de grado 2) para conectar tres puntos, la regla de Simpson 3/8 utiliza **polinomios cúbicos** (grado 3) para conectar grupos de **cuatro puntos** sucesivos.
 
-Aunque podría pensarse que al usar un polinomio de mayor grado es infinitamente superior, en la práctica la regla de Simpson 3/8 tiene una precisión muy similar a la de 1/3. Su verdadera utilidad y ventaja radica en la restricción de los intervalos: mientras que Simpson 1/3 exige estrictamente un número de subintervalos par, **Simpson 3/8 exige que el número de subintervalos ($n$) sea un múltiplo de 3**. En software de ingeniería, ambas reglas suelen combinarse (usando 1/3 para la mayor parte del área y 3/8 para el residuo si la cantidad total de intervalos es impar).
 
-### Fórmulas y Operaciones
+### Teoría y Fundamentación Matemática
+Al igual que la regla de Simpson 1/3 usa una parábola (polinomio de segundo grado) para aproximar la forma de la función, la **Regla de Simpson 3/8** da un paso más allá y utiliza un **polinomio cúbico** (de tercer grado) para unir los puntos.
 
+Para definir una ecuación cúbica se requieren exactamente cuatro puntos. Esto significa que el intervalo a evaluar debe dividirse en **tres subintervalos**. Por consiguiente, si se desea aplicar la Regla de Simpson 3/8 Compuesta a lo largo de un dominio más grande, el número total de subintervalos ($n$) **debe ser un múltiplo de 3** ($3, 6, 9, 12, \dots$).
+
+En la práctica, Simpson 1/3 y Simpson 3/8 tienen una precisión muy similar. Sin embargo, Simpson 3/8 resulta extremadamente útil cuando el número total de subintervalos que tenemos en una tabla de datos es impar, pero no es un múltiplo de 3 (por ejemplo, $n=5$). En esos casos, se suele aplicar Simpson 1/3 en los primeros segmentos pares y se remata con Simpson 3/8 en los últimos tres segmentos.
+
+El "3/8" en su nombre proviene del factor $3h/8$ que aparece al resolver la integral analítica del polinomio cúbico.
+
+### Fórmulas y Criterios
 Dado un intervalo de integración $[a, b]$ dividido en $n$ subintervalos (donde $n$ es múltiplo de 3):
 
-1. **Cálculo del tamaño del paso ($h$):**
-$$h = \frac{b - a}{n}$$
+1. **Tamaño del paso ($h$):**
+   $$h = \frac{b - a}{n}$$
 
-2. **Fórmula Compuesta de Simpson 3/8:**
-La aproximación de la integral $I$ suma los extremos, y para los puntos interiores alterna coeficientes multiplicadores. Los puntos cuyo índice es múltiplo de 3 se multiplican por 2, y todos los demás se multiplican por 3:
-$$I \approx \frac{3h}{8} \left[ f(x_0) + 3 \sum_{i \neq \text{múltiplo de 3}} f(x_i) + 2 \sum_{j = \text{múltiplo de 3}} f(x_j) + f(x_n) \right]$$
+2. **Fórmula de Simpson 3/8 Compuesta:**
+   La aproximación de la integral sigue un patrón específico de multiplicadores ($1, 3, 3, 2, 3, 3, 2, \dots, 3, 3, 1$):
+   $$\int_a^b f(x) dx \approx \frac{3h}{8} \left[ f(x_0) + 3f(x_1) + 3f(x_2) + 2f(x_3) + 3f(x_4) + 3f(x_5) + \dots + f(x_n) \right]$$
+   
+   *En palabras simples:* Los puntos extremos se multiplican por 1. Los puntos interiores cuyo subíndice es múltiplo de 3 (como $x_3, x_6, x_9$) se multiplican por **2**. Todos los demás puntos interiores se multiplican por **3**.
 
-*Regla mnemotécnica para los coeficientes interiores: 3, 3, 2, 3, 3, 2, 3, 3, 2...*
+### Ejercicio Resuelto
+**Enunciado:** Aproxima la integral de la función $f(x) = \frac{1}{x}$ en el intervalo $[1, 4]$ utilizando la Regla de Simpson 3/8 con $n = 3$ subintervalos.
 
-### Ejemplo Paso a Paso
+**Solución paso a paso:**
+**1. Verificación y cálculo del tamaño de paso ($h$):**
+   * El número de subintervalos $n = 3$ es múltiplo de 3, por lo que el método es aplicable.
+   * Calculamos $h$:
+     $$h = \frac{4 - 1}{3} = \frac{3}{3} = 1.0$$
 
-Aproximemos la integral definida de la función cúbica $f(x) = x^3$ en el intervalo de $a = 0$ a $b = 3$, utilizando $n = 3$ subintervalos.
-*(Nota: Analíticamente, la integral exacta es $\int_{0}^{3} x^3 dx = \frac{x^4}{4} \Big|_0^3 = \frac{81}{4} = 20.25$)*
+**2. Determinación de los puntos a evaluar ($x_i$):**
+   Comenzamos en $a = 1$ y avanzamos de $1.0$ en $1.0$ hasta llegar a $b = 4$.
+   * $x_0 = 1.0$
+   * $x_1 = 2.0$ 
+   * $x_2 = 3.0$
+   * $x_3 = 4.0$
 
-**Paso 1: Calcular $h$ y los puntos a evaluar**
-$$h = \frac{3 - 0}{3} = 1$$
-Los cuatro puntos $x$ espaciados por $h$ son:
-- $x_0 = 0 \implies f(0) = 0^3 = 0$
-- $x_1 = 1 \implies f(1) = 1^3 = 1$
-- $x_2 = 2 \implies f(2) = 2^3 = 8$
-- $x_3 = 3 \implies f(3) = 3^3 = 27$
+**3. Evaluación de la función $f(x) = \frac{1}{x}$ en cada punto:**
+   * $f(1.0) = \frac{1}{1.0} = 1.0000$
+   * $f(2.0) = \frac{1}{2.0} = 0.5000$
+   * $f(3.0) = \frac{1}{3.0} \approx 0.3333$
+   * $f(4.0) = \frac{1}{4.0} = 0.2500$
 
-**Paso 2: Aplicar la fórmula de Simpson 3/8**
-Dado que $n=3$, utilizamos la versión simple de la fórmula sin repeticiones:
-$$I \approx \frac{3h}{8} \left[ f(x_0) + 3f(x_1) + 3f(x_2) + f(x_3) \right]$$
-$$I \approx \frac{3(1)}{8} \left[ 0 + 3(1) + 3(8) + 27 \right]$$
-$$I \approx \frac{3}{8} \left[ 3 + 24 + 27 \right] = \frac{3}{8} [54]$$
-$$I \approx \frac{162}{8} = 20.25$$
+**4. Aplicación de la fórmula de Simpson 3/8:**
+   Como solo tenemos 3 subintervalos, no hay puntos interiores múltiples de 3, por lo que el patrón de coeficientes es simple ($1, 3, 3, 1$):
+   $$I \approx \frac{3(1.0)}{8} \Big[ f(1.0) + 3f(2.0) + 3f(3.0) + f(4.0) \Big]$$
+   $$I \approx 0.375 \Big[ 1.0000 + 3(0.5000) + 3(0.3333) + 0.2500 \Big]$$
+   $$I \approx 0.375 \Big[ 1.0000 + 1.5000 + 0.9999 + 0.2500 \Big]$$
+   $$I \approx 0.375 \Big[ 3.7499 \Big] \approx \mathbf{1.4062}$$
 
-*Al igual que su contraparte, el resultado es numéricamente exacto al valor analítico, demostrando que este método integra perfectamente polinomios de hasta grado 3.*
+**Conclusión:** La aproximación numérica es $1.4062$. El valor real de la integral $\ln(4)$ es aproximadamente $1.3863$. La discrepancia se debe a que evaluamos un segmento muy ancho (paso de $1.0$); aumentar $n$ a 6 o 9 reduciría el error a casi cero.
 
 ### Código
 [simpson38.py](../3-Codigos/simpson38.py)
 Markdown
-## Integración Numérica: Regla del Trapecio
 
-### Naturaleza y Fundamento Matemático
-La regla del trapecio es el método más elemental dentro de la familia de fórmulas de integración numérica de Newton-Cotes. Su principio geométrico es muy intuitivo: en lugar de aproximar el área bajo una curva utilizando rectángulos (como en las sumas de Riemann básicas), conecta dos puntos adyacentes de la función con una **línea recta**, formando así un trapecio.
+## Regla del Trapecio
 
-Al utilizar un polinomio de primer grado (una recta) para aproximar el comportamiento de la función, este método es matemáticamente exacto solo para funciones lineales. Cuando se aplica a curvas complejas, genera un error de truncamiento considerable, ya que la recta ignora por completo la concavidad o convexidad de la curva real. Para mitigar este error sin cambiar de método, se aplica la **Regla del Trapecio Compuesta**, que consiste en dividir el intervalo de integración original en $n$ subintervalos más pequeños (múltiples trapecios delgados), lo que hace que la suma de sus áreas se adapte mejor al contorno real de la curva.
 
-### Fórmulas y Operaciones
 
-Dado un intervalo de integración $[a, b]$ dividido en $n$ subintervalos del mismo ancho:
+### Teoría y Fundamentación Matemática
+La integración numérica permite aproximar el valor de una integral definida $\int_a^b f(x) dx$. La **Regla del Trapecio** es la primera y más sencilla de las fórmulas cerradas de Newton-Cotes. Su principio fundamental consiste en unir los puntos extremos de la función en el intervalo $[a, b]$ mediante una **línea recta** (un polinomio de primer grado), formando así un trapecio bajo la curva cuya área es fácil de calcular.
 
-1. **Cálculo del tamaño del paso ($h$):**
-$$h = \frac{b - a}{n}$$
+Dado que usar una sola línea recta para aproximar toda una curva genera un error de truncamiento significativo (especialmente en intervalos grandes o curvas muy pronunciadas), en la práctica se emplea la **Regla del Trapecio Compuesta**. Esta variante divide el intervalo total en $n$ subintervalos iguales y aplica la regla básica a cada uno de ellos, sumando luego todas las áreas. A diferencia de los métodos de Simpson, la regla del trapecio **no tiene restricciones en cuanto a la cantidad de subintervalos** (pueden ser pares o impares).
 
-2. **Fórmula de la Regla del Trapecio Compuesta:**
-La aproximación de la integral $I$ suma las evaluaciones en los extremos y suma el doble de todas las evaluaciones en los puntos interiores:
-$$I \approx \frac{h}{2} \left[ f(x_0) + 2 \sum_{i=1}^{n-1} f(x_i) + f(x_n) \right]$$
+### Fórmulas y Criterios
+Dado un intervalo de integración $[a, b]$ dividido en $n$ subintervalos:
 
-*Regla mnemotécnica: Los extremos del intervalo general se multiplican por 1, y todos los puntos de en medio se multiplican por 2.*
+1. **Tamaño del paso ($h$):**
+   La distancia constante entre cada punto a evaluar es:
+   $$h = \frac{b - a}{n}$$
 
-### Ejemplo Paso a Paso
+2. **Fórmula del Trapecio Compuesta:**
+   Para aproximar la integral, se evalúa la función en los puntos $x_0, x_1, x_2, \dots, x_n$ y se agrupan de la siguiente manera:
+   $$\int_a^b f(x) dx \approx \frac{h}{2} \left[ f(x_0) + 2 \sum_{i=1}^{n-1} f(x_i) + f(x_n) \right]$$
+   
+   *En palabras simples:* Se suman el primer y último punto (los extremos), más **2 veces** la suma de todos los puntos interiores; el resultado total se multiplica por $h/2$.
 
-Para evidenciar la diferencia de precisión geométrica con los métodos de Simpson, aproximaremos la misma integral definida de la función $f(x) = x^2$ en el intervalo de $a = 0$ a $b = 2$, utilizando $n = 2$ subintervalos.
-*(Nota: Analíticamente, la integral exacta es $\int_{0}^{2} x^2 dx = \frac{x^3}{3} \Big|_0^2 = \frac{8}{3} \approx 2.6666...$)*
+### Ejercicio Resuelto
+**Enunciado:** Aproxima la integral de la función $f(x) = x^2$ en el intervalo $[0, 2]$ utilizando la Regla del Trapecio con $n = 4$ subintervalos. Compara el resultado con el valor analítico exacto.
 
-**Paso 1: Calcular $h$ y los puntos a evaluar**
-$$h = \frac{2 - 0}{2} = 1$$
-Los puntos $x$ espaciados por $h$ son idénticos a los del ejemplo de Simpson 1/3:
-- $x_0 = 0 \implies f(0) = 0^2 = 0$
-- $x_1 = 1 \implies f(1) = 1^2 = 1$
-- $x_2 = 2 \implies f(2) = 2^2 = 4$
+**Solución paso a paso:**
+**1. Cálculo del tamaño de paso ($h$):**
+   $$h = \frac{2 - 0}{4} = \frac{2}{4} = 0.5$$
 
-**Paso 2: Aplicar la fórmula del Trapecio Compuesto**
-$$I \approx \frac{h}{2} \left[ f(x_0) + 2f(x_1) + f(x_2) \right]$$
-$$I \approx \frac{1}{2} \left[ 0 + 2(1) + 4 \right]$$
-$$I \approx \frac{1}{2} [6] = 3.0$$
+**2. Determinación de los puntos a evaluar ($x_i$):**
+   Comenzamos en $a = 0$ y avanzamos de $0.5$ en $0.5$ hasta $b = 2$.
+   * $x_0 = 0.0$
+   * $x_1 = 0.5$
+   * $x_2 = 1.0$
+   * $x_3 = 1.5$
+   * $x_4 = 2.0$
 
-*Análisis del error: El resultado es $3.0$, mientras que el real es $2.666...$. A diferencia de Simpson 1/3 (que dio el valor exacto), el trapecio sobreestimó el área porque la línea recta trazada por encima de la curva convexa de $x^2$ incluyó espacio extra (un error característico de los métodos lineales).*
+**3. Evaluación de la función $f(x) = x^2$ en cada punto:**
+   * $f(0.0) = 0.0^2 = 0.0000$
+   * $f(0.5) = 0.5^2 = 0.2500$
+   * $f(1.0) = 1.0^2 = 1.0000$
+   * $f(1.5) = 1.5^2 = 2.2500$
+   * $f(2.0) = 2.0^2 = 4.0000$
 
+**4. Aplicación de la fórmula del Trapecio Compuesta:**
+   $$I \approx \frac{0.5}{2} \Big[ f(0.0) + 2 \big( f(0.5) + f(1.0) + f(1.5) \big) + f(2.0) \Big]$$
+   $$I \approx 0.25 \Big[ 0.0000 + 2 \big( 0.2500 + 1.0000 + 2.2500 \big) + 4.0000 \Big]$$
+   $$I \approx 0.25 \Big[ 0.0000 + 2 \big( 3.5000 \big) + 4.0000 \Big]$$
+   $$I \approx 0.25 \Big[ 0.0000 + 7.0000 + 4.0000 \Big]$$
+   $$I \approx 0.25 \Big[ 11.0000 \Big] = \mathbf{2.7500}$$
+
+**Conclusión:** La aproximación numérica es $2.7500$. El valor real de esta integral es $\int_0^2 x^2 dx = [\frac{x^3}{3}]_0^2 = \frac{8}{3} \approx 2.6667$. El error absoluto es de $0.0833$, el cual puede reducirse significativamente utilizando un $n$ mayor (por ejemplo, $n=10$).
 ### Código
 [trapecio.py](../3-Codigos/trapecio.py)
 
